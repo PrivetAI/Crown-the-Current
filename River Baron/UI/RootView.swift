@@ -1,0 +1,104 @@
+import SwiftUI
+
+/// A live match wrapped for fullScreenCover presentation.
+struct MatchLaunchItem: Identifiable {
+    let id = UUID()
+    let controller: MatchController
+}
+
+/// Root shell: custom HStack tab bar (Campaign / Skirmish / Chronicle / More)
+/// plus the fullscreen match router and the global achievement toast.
+struct RootView: View {
+    @ObservedObject var store = RBStore.shared
+    @State private var tab = 0
+    @State private var session: MatchLaunchItem? = nil
+
+    var body: some View {
+        ZStack(alignment: .bottom) {
+            VStack(spacing: 0) {
+                Group {
+                    switch tab {
+                    case 0:
+                        NavigationView { CampaignView(startMatch: start) }
+                            .navigationViewStyle(StackNavigationViewStyle())
+                    case 1:
+                        NavigationView { SkirmishView(startMatch: start) }
+                            .navigationViewStyle(StackNavigationViewStyle())
+                    case 2:
+                        NavigationView { ChronicleView() }
+                            .navigationViewStyle(StackNavigationViewStyle())
+                    default:
+                        NavigationView { MoreView() }
+                            .navigationViewStyle(StackNavigationViewStyle())
+                    }
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+
+                tabBar
+            }
+
+            if let toast = store.toast {
+                Text(toast)
+                    .font(RBTheme.body(14))
+                    .foregroundColor(.white)
+                    .padding(.horizontal, 18).padding(.vertical, 11)
+                    .background(
+                        Capsule().fill(RBTheme.navy)
+                            .overlay(Capsule().strokeBorder(RBTheme.goldLine.opacity(0.8), lineWidth: 1.2))
+                    )
+                    .padding(.bottom, 84)
+                    .transition(.move(edge: .bottom).combined(with: .opacity))
+            }
+        }
+        .background(RBTheme.parchment.ignoresSafeArea())
+        .fullScreenCover(item: $session) { item in
+            MatchScreen(controller: item.controller, onExit: { session = nil })
+        }
+    }
+
+    private func start(_ match: MatchState) {
+        store.root.activeMatch = match
+        store.save()
+        let controller = MatchController(match: match, store: store)
+        session = MatchLaunchItem(controller: controller)
+    }
+
+    private var tabBar: some View {
+        HStack(spacing: 0) {
+            tabButton(0, "Campaign") { AnyView(RBPennantIcon().fill($0)) }
+            tabButton(1, "Skirmish") { AnyView(RBOarsIcon().fill($0)) }
+            tabButton(2, "Chronicle") { AnyView(RBStarIcon().fill($0)) }
+            tabButton(3, "More") {
+                AnyView(RBBookIcon().stroke($0, style: StrokeStyle(lineWidth: 2, lineCap: .round, lineJoin: .round)))
+            }
+        }
+        .padding(.top, 8)
+        .padding(.bottom, 4)
+        .background(
+            RBTheme.card
+                .overlay(Rectangle().frame(height: 1).foregroundColor(RBTheme.cardBorder), alignment: .top)
+                .edgesIgnoringSafeArea(.bottom)
+        )
+    }
+
+    private func tabButton(_ index: Int, _ label: String,
+                           _ icon: @escaping (Color) -> AnyView) -> some View {
+        let active = tab == index
+        let color = active ? RBTheme.navy : RBTheme.ink.opacity(0.4)
+        return Button {
+            store.tap()
+            withAnimation(.easeInOut(duration: 0.15)) { tab = index }
+        } label: {
+            VStack(spacing: 4) {
+                icon(color)
+                    .frame(width: 24, height: 24)
+                Text(label)
+                    .font(RBTheme.body(11))
+                    .foregroundColor(color)
+            }
+            .frame(maxWidth: .infinity)
+            .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+    }
+}

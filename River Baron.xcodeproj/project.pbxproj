@@ -1,0 +1,445 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		10FD01000C082DBCFB82A012 /* MatchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89EAF91E4BE0CACFED1D0DAD /* MatchController.swift */; };
+		113BAA256D9A8B40BE154BCA /* MatchActionPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C753AD234AB2DA74E1E3701 /* MatchActionPanel.swift */; };
+		3C19371F473892F3D7B2E8E8 /* RBTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9BEA780302F0A62C52C9989 /* RBTheme.swift */; };
+		4591C1B3C154E3FBD90AE317 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 75362C1262870D05D373C9F6 /* Assets.xcassets */; };
+		51C3C7997136368E8480D901 /* RBScenarios.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B48E846E3AB0FB943FB8599 /* RBScenarios.swift */; };
+		6D99915DEB77CC26D7B27A19 /* RiverBaronApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C0DC0788F5E348D94401E1 /* RiverBaronApp.swift */; };
+		7870870ADF918555C394DF67 /* RiverBaronLoadingScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF5396F0A00B1ED2ECB37BE3 /* RiverBaronLoadingScreen.swift */; };
+		79F3882E3F825C910638E74D /* CampaignView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCD89022CB533997AF5D469E /* CampaignView.swift */; };
+		7CD53E1A7D86345474C38C82 /* ChronicleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF469BF817632B7F6B943A4C /* ChronicleView.swift */; };
+		80177128E36475302866E238 /* MapCanvasView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5552923A6DF98442A97A70D3 /* MapCanvasView.swift */; };
+		81B4F481FE2A36530526DB73 /* RBModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157012680B10E76447D229CC /* RBModel.swift */; };
+		8F2A238F48E599EEEBEA6DAD /* RiverBaronWebPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97B5D0795A99715CB475ECBF /* RiverBaronWebPanel.swift */; };
+		9C1C04FF2361FFE8C761000B /* MatchOverlays.swift in Sources */ = {isa = PBXBuildFile; fileRef = 745E41C647761BD77C6C1B8E /* MatchOverlays.swift */; };
+		A1DB0F0CCD105C9394FC1CED /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A302ABEA9BC317668AD60D0A /* RootView.swift */; };
+		ADFEF90F8F943341238F7FF2 /* SkirmishView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FE4C31BB0521D107321DC68 /* SkirmishView.swift */; };
+		AE3E0572C72CAF1036A98018 /* MatchScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A193A28A6B620A57AB1C49E /* MatchScreen.swift */; };
+		C80DB3D1EBBA74453CA0DAA1 /* MoreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2095EA71EE2F9C412AA170A /* MoreView.swift */; };
+		D912F7B78169AA1E2D7230AD /* RBAI.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6224E9E04FF75DEB2271B16 /* RBAI.swift */; };
+		DF1C3B17CF481E875508766F /* RBRandom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8318F1379FE25216A950D982 /* RBRandom.swift */; };
+		E4D9A7443F01FC8C492917FD /* RBEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE6726B5880805F48E0168B2 /* RBEngine.swift */; };
+		E79D3DBBADB81496236A69CC /* RBMapGen.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCAC2CFA8D1BB7CB87369579 /* RBMapGen.swift */; };
+		ED97B7D4220CD8951AF6C656 /* RBStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF6DFB8C7CA218397C34B046 /* RBStore.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		0FE4C31BB0521D107321DC68 /* SkirmishView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkirmishView.swift; sourceTree = "<group>"; };
+		157012680B10E76447D229CC /* RBModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RBModel.swift; sourceTree = "<group>"; };
+		1F572DE71C880D02E25CA550 /* River Baron.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = "River Baron.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		3C753AD234AB2DA74E1E3701 /* MatchActionPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchActionPanel.swift; sourceTree = "<group>"; };
+		5552923A6DF98442A97A70D3 /* MapCanvasView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapCanvasView.swift; sourceTree = "<group>"; };
+		5A193A28A6B620A57AB1C49E /* MatchScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchScreen.swift; sourceTree = "<group>"; };
+		745E41C647761BD77C6C1B8E /* MatchOverlays.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchOverlays.swift; sourceTree = "<group>"; };
+		75362C1262870D05D373C9F6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		7B48E846E3AB0FB943FB8599 /* RBScenarios.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RBScenarios.swift; sourceTree = "<group>"; };
+		8318F1379FE25216A950D982 /* RBRandom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RBRandom.swift; sourceTree = "<group>"; };
+		89EAF91E4BE0CACFED1D0DAD /* MatchController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchController.swift; sourceTree = "<group>"; };
+		96CABA31EF0614AFDCE041B1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		97B5D0795A99715CB475ECBF /* RiverBaronWebPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RiverBaronWebPanel.swift; sourceTree = "<group>"; };
+		A302ABEA9BC317668AD60D0A /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
+		A5C0DC0788F5E348D94401E1 /* RiverBaronApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RiverBaronApp.swift; sourceTree = "<group>"; };
+		B2095EA71EE2F9C412AA170A /* MoreView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreView.swift; sourceTree = "<group>"; };
+		B6224E9E04FF75DEB2271B16 /* RBAI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RBAI.swift; sourceTree = "<group>"; };
+		BCD89022CB533997AF5D469E /* CampaignView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CampaignView.swift; sourceTree = "<group>"; };
+		C9BEA780302F0A62C52C9989 /* RBTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RBTheme.swift; sourceTree = "<group>"; };
+		CF5396F0A00B1ED2ECB37BE3 /* RiverBaronLoadingScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RiverBaronLoadingScreen.swift; sourceTree = "<group>"; };
+		DE6726B5880805F48E0168B2 /* RBEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RBEngine.swift; sourceTree = "<group>"; };
+		DF6DFB8C7CA218397C34B046 /* RBStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RBStore.swift; sourceTree = "<group>"; };
+		EF469BF817632B7F6B943A4C /* ChronicleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChronicleView.swift; sourceTree = "<group>"; };
+		FCAC2CFA8D1BB7CB87369579 /* RBMapGen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RBMapGen.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		0D74EE36B931727BD37B8A18 /* River Baron */ = {
+			isa = PBXGroup;
+			children = (
+				75362C1262870D05D373C9F6 /* Assets.xcassets */,
+				96CABA31EF0614AFDCE041B1 /* Info.plist */,
+				A5C0DC0788F5E348D94401E1 /* RiverBaronApp.swift */,
+				CF5396F0A00B1ED2ECB37BE3 /* RiverBaronLoadingScreen.swift */,
+				97B5D0795A99715CB475ECBF /* RiverBaronWebPanel.swift */,
+				A1B7D9CFE433E897C4CF7A39 /* Engine */,
+				C02B527AEC6D3322D289F0AF /* Store */,
+				3E80D8CF52F900ADA44D1ECA /* UI */,
+			);
+			path = "River Baron";
+			sourceTree = "<group>";
+		};
+		3E80D8CF52F900ADA44D1ECA /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				BCD89022CB533997AF5D469E /* CampaignView.swift */,
+				EF469BF817632B7F6B943A4C /* ChronicleView.swift */,
+				5552923A6DF98442A97A70D3 /* MapCanvasView.swift */,
+				3C753AD234AB2DA74E1E3701 /* MatchActionPanel.swift */,
+				89EAF91E4BE0CACFED1D0DAD /* MatchController.swift */,
+				745E41C647761BD77C6C1B8E /* MatchOverlays.swift */,
+				5A193A28A6B620A57AB1C49E /* MatchScreen.swift */,
+				B2095EA71EE2F9C412AA170A /* MoreView.swift */,
+				C9BEA780302F0A62C52C9989 /* RBTheme.swift */,
+				A302ABEA9BC317668AD60D0A /* RootView.swift */,
+				0FE4C31BB0521D107321DC68 /* SkirmishView.swift */,
+			);
+			path = UI;
+			sourceTree = "<group>";
+		};
+		62DBB39BB890CD00D8072571 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				1F572DE71C880D02E25CA550 /* River Baron.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		A1B7D9CFE433E897C4CF7A39 /* Engine */ = {
+			isa = PBXGroup;
+			children = (
+				B6224E9E04FF75DEB2271B16 /* RBAI.swift */,
+				DE6726B5880805F48E0168B2 /* RBEngine.swift */,
+				FCAC2CFA8D1BB7CB87369579 /* RBMapGen.swift */,
+				157012680B10E76447D229CC /* RBModel.swift */,
+				8318F1379FE25216A950D982 /* RBRandom.swift */,
+				7B48E846E3AB0FB943FB8599 /* RBScenarios.swift */,
+			);
+			path = Engine;
+			sourceTree = "<group>";
+		};
+		C02B527AEC6D3322D289F0AF /* Store */ = {
+			isa = PBXGroup;
+			children = (
+				DF6DFB8C7CA218397C34B046 /* RBStore.swift */,
+			);
+			path = Store;
+			sourceTree = "<group>";
+		};
+		E45A639B53774615EB432A24 = {
+			isa = PBXGroup;
+			children = (
+				0D74EE36B931727BD37B8A18 /* River Baron */,
+				62DBB39BB890CD00D8072571 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		5485D01305E28B42074F23C7 /* River Baron */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FF248BCCCF5B9B13E39A41EE /* Build configuration list for PBXNativeTarget "River Baron" */;
+			buildPhases = (
+				D8E41A407CE88225B815DD51 /* Sources */,
+				E952A48F44B557E060372E24 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "River Baron";
+			packageProductDependencies = (
+			);
+			productName = "River Baron";
+			productReference = 1F572DE71C880D02E25CA550 /* River Baron.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		46E7CCE96A18937FF65FE27A /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					5485D01305E28B42074F23C7 = {
+						DevelopmentTeam = "";
+						ProvisioningStyle = Manual;
+					};
+				};
+			};
+			buildConfigurationList = C3A31D27D664C80681E78CF6 /* Build configuration list for PBXProject "River Baron" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = E45A639B53774615EB432A24;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 62DBB39BB890CD00D8072571 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				5485D01305E28B42074F23C7 /* River Baron */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		E952A48F44B557E060372E24 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4591C1B3C154E3FBD90AE317 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		D8E41A407CE88225B815DD51 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				79F3882E3F825C910638E74D /* CampaignView.swift in Sources */,
+				7CD53E1A7D86345474C38C82 /* ChronicleView.swift in Sources */,
+				80177128E36475302866E238 /* MapCanvasView.swift in Sources */,
+				113BAA256D9A8B40BE154BCA /* MatchActionPanel.swift in Sources */,
+				10FD01000C082DBCFB82A012 /* MatchController.swift in Sources */,
+				9C1C04FF2361FFE8C761000B /* MatchOverlays.swift in Sources */,
+				AE3E0572C72CAF1036A98018 /* MatchScreen.swift in Sources */,
+				C80DB3D1EBBA74453CA0DAA1 /* MoreView.swift in Sources */,
+				D912F7B78169AA1E2D7230AD /* RBAI.swift in Sources */,
+				E4D9A7443F01FC8C492917FD /* RBEngine.swift in Sources */,
+				E79D3DBBADB81496236A69CC /* RBMapGen.swift in Sources */,
+				81B4F481FE2A36530526DB73 /* RBModel.swift in Sources */,
+				DF1C3B17CF481E875508766F /* RBRandom.swift in Sources */,
+				51C3C7997136368E8480D901 /* RBScenarios.swift in Sources */,
+				ED97B7D4220CD8951AF6C656 /* RBStore.swift in Sources */,
+				3C19371F473892F3D7B2E8E8 /* RBTheme.swift in Sources */,
+				6D99915DEB77CC26D7B27A19 /* RiverBaronApp.swift in Sources */,
+				7870870ADF918555C394DF67 /* RiverBaronLoadingScreen.swift in Sources */,
+				8F2A238F48E599EEEBEA6DAD /* RiverBaronWebPanel.swift in Sources */,
+				A1DB0F0CCD105C9394FC1CED /* RootView.swift in Sources */,
+				ADFEF90F8F943341238F7FF2 /* SkirmishView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		8158E3013B0A776C12627670 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGNING_ALLOWED = NO;
+				CODE_SIGNING_REQUIRED = NO;
+				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_STYLE = Manual;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = "";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		BFB749B94ECE03C1D5CE8937 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGNING_ALLOWED = NO;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
+				INFOPLIST_FILE = "River Baron/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "River Baron";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.riverbaron.app;
+				PRODUCT_NAME = "River Baron";
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		D533ACE5AA352E2FCDB0D803 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGNING_ALLOWED = NO;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
+				INFOPLIST_FILE = "River Baron/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "River Baron";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.riverbaron.app;
+				PRODUCT_NAME = "River Baron";
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		F84015DFE9F2F710C765B8A4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGNING_ALLOWED = NO;
+				CODE_SIGNING_REQUIRED = NO;
+				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_STYLE = Manual;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		C3A31D27D664C80681E78CF6 /* Build configuration list for PBXProject "River Baron" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F84015DFE9F2F710C765B8A4 /* Debug */,
+				8158E3013B0A776C12627670 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		FF248BCCCF5B9B13E39A41EE /* Build configuration list for PBXNativeTarget "River Baron" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D533ACE5AA352E2FCDB0D803 /* Debug */,
+				BFB749B94ECE03C1D5CE8937 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 46E7CCE96A18937FF65FE27A /* Project object */;
+}
