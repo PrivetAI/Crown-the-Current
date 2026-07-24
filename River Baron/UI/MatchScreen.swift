@@ -27,7 +27,7 @@ struct MatchScreen: View {
                 VStack(spacing: 0) {
                     hud
                     Spacer(minLength: 0)
-                    bottomArea
+                    bottomArea(geo.size.height)
                 }
 
                 overlays
@@ -195,11 +195,21 @@ struct MatchScreen: View {
 
     // MARK: - Bottom (action panel + end turn / ai banner)
 
-    private var bottomArea: some View {
+    /// The action panel is capped against the live screen height: in landscape
+    /// (or on a 375×667 phone) a full-height panel would otherwise slide up
+    /// under the HUD and cover the map controls.
+    private func panelCap(_ screenHeight: CGFloat) -> CGFloat {
+        let chrome: CGFloat = 178   // HUD + End Turn banner + paddings
+        return max(120, min(250, screenHeight - chrome))
+    }
+
+    private func bottomArea(_ screenHeight: CGFloat) -> some View {
         VStack(spacing: 8) {
             if let sel = controller.selectedNodeID, let node = state.node(sel) {
                 MatchActionPanel(controller: controller, node: node,
-                                 damPickerNode: $damPickerNode, onClose: { controller.deselect() })
+                                 damPickerNode: $damPickerNode,
+                                 maxPanelHeight: panelCap(screenHeight),
+                                 onClose: { controller.deselect() })
                     .padding(.horizontal, 10)
                     .transition(.move(edge: .bottom).combined(with: .opacity))
             }

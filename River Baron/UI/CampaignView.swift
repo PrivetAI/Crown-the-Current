@@ -47,11 +47,11 @@ struct CampaignView: View {
     private func actSection(_ act: Int) -> some View {
         let metas = RBScenarios.all.filter { $0.act == act }
         return VStack(spacing: 12) {
-            VStack(spacing: 3) {
-                Text(RBScenarios.actTitles[act - 1]).font(RBTheme.display(18)).foregroundColor(RBTheme.navy)
-                Text(RBScenarios.actTaglines[act - 1]).font(RBTheme.body(12)).foregroundColor(RBTheme.inkSoft)
-                    .multilineTextAlignment(.center)
-            }
+            RBArtBanner(imageName: "rb_act\(act)",
+                        title: RBScenarios.actTitles[act - 1],
+                        subtitle: RBScenarios.actTaglines[act - 1],
+                        height: 138)
+                .padding(.top, 4)
             ForEach(metas) { meta in
                 scenarioCard(meta)
             }
@@ -118,6 +118,8 @@ struct ScenarioDetailView: View {
                 RBRibbonHeader(title: meta.title, subtitle: meta.tagline)
                     .padding(.top, 6)
 
+                RBArtBanner(imageName: scenarioArt, height: 150)
+
                 RBCard {
                     Text(meta.narration)
                         .font(RBTheme.body(15)).foregroundColor(RBTheme.ink)
@@ -159,6 +161,14 @@ struct ScenarioDetailView: View {
         }
         .background(RBTheme.parchment.ignoresSafeArea())
         .navigationBarTitleDisplayMode(.inline)
+    }
+
+    /// A vignette that reflects the scenario's flavor: pirate waters, dammed
+    /// floods, or the act's own riverlands.
+    private var scenarioArt: String {
+        if meta.pirates { return "rb_vig_pirate" }
+        if meta.flood > 0 { return "rb_vig_dam" }
+        return "rb_act\(meta.act)"
     }
 
     private func ruleChip(_ text: String) -> some View {

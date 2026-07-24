@@ -9,6 +9,9 @@ struct ChronicleView: View {
             RBRibbonHeader(title: "Chronicle")
                 .padding(.top, 6).padding(.horizontal, 14)
 
+            RBArtBanner(imageName: "rb_chronicle", height: 104)
+                .padding(.horizontal, 14).padding(.top, 10)
+
             HStack(spacing: 6) {
                 tab("Records", 0)
                 tab("Banners", 1)

@@ -6,6 +6,9 @@ struct MatchActionPanel: View {
     @ObservedObject var controller: MatchController
     let node: RBNode
     @Binding var damPickerNode: Int?
+    /// Capped by the parent from the live screen height so the panel can never
+    /// grow up into the HUD on a short screen (landscape, or 375×667).
+    var maxPanelHeight: CGFloat = 250
     let onClose: () -> Void
 
     private var state: GameState { controller.state }
@@ -24,7 +27,7 @@ struct MatchActionPanel: View {
                 }
                 .padding(.top, 8)
             }
-            .frame(maxHeight: 250)
+            .frame(maxHeight: maxPanelHeight)
         }
         .padding(13)
         .background(

@@ -20,6 +20,8 @@ struct SkirmishView: View {
                 RBRibbonHeader(title: "Free Skirmish", subtitle: "A fresh river, generated to your taste")
                     .padding(.top, 6)
 
+                RBArtBanner(imageName: "rb_skirmish", height: 118)
+
                 if let match = store.root.activeMatch, match.mode == "skirmish" {
                     resumeCard(turn: match.game.turn,
                                nodes: match.game.nodes.count) { startMatch(match) }

@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "act1_delta.png",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

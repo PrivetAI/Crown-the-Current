@@ -126,6 +126,58 @@ struct RBCard<Content: View>: View {
     }
 }
 
+/// A painterly hero-art banner: a catalog image under a bottom legibility
+/// gradient, with an optional overlaid title/subtitle. Sized to a fixed height
+/// and clipped, so it stays safe on a 375×667 screen.
+struct RBArtBanner: View {
+    let imageName: String
+    var title: String? = nil
+    var subtitle: String? = nil
+    var height: CGFloat = 132
+
+    var body: some View {
+        ZStack(alignment: .bottomLeading) {
+            Image(imageName)
+                .resizable()
+                .aspectRatio(contentMode: .fill)
+                .frame(maxWidth: .infinity)
+            LinearGradient(
+                gradient: Gradient(colors: [
+                    Color.black.opacity(0.0),
+                    Color.black.opacity(0.12),
+                    Color.black.opacity(0.58)
+                ]),
+                startPoint: .top, endPoint: .bottom)
+            if title != nil || subtitle != nil {
+                VStack(alignment: .leading, spacing: 2) {
+                    if let t = title {
+                        Text(t)
+                            .font(RBTheme.display(20))
+                            .foregroundColor(.white)
+                            .shadow(color: .black.opacity(0.75), radius: 3, y: 1)
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.6)
+                    }
+                    if let s = subtitle {
+                        Text(s)
+                            .font(RBTheme.body(12))
+                            .foregroundColor(.white.opacity(0.92))
+                            .shadow(color: .black.opacity(0.75), radius: 2, y: 1)
+                            .fixedSize(horizontal: false, vertical: true)
+                    }
+                }
+                .padding(.horizontal, 13)
+                .padding(.vertical, 11)
+                .frame(maxWidth: .infinity, alignment: .leading)
+            }
+        }
+        .frame(height: height)
+        .frame(maxWidth: .infinity)
+        .clipShape(RoundedRectangle(cornerRadius: 14))
+        .overlay(RoundedRectangle(cornerRadius: 14).strokeBorder(RBTheme.cardBorder, lineWidth: 1.2))
+    }
+}
+
 struct RBButtonStyle: ButtonStyle {
     var fill: Color = RBTheme.navy
     var textColor: Color = .white
