@@ -2,8 +2,11 @@ import SwiftUI
 
 struct MoreView: View {
     @ObservedObject var store = RBStore.shared
+    @Environment(\.horizontalSizeClass) private var hSize
     @State private var showPrivacy = false
     @State private var confirmReset = false
+
+    private var layout: RBLayout { RBLayout(hSize) }
 
     var body: some View {
         ScrollView {
@@ -107,6 +110,7 @@ struct MoreView: View {
                     }
                 }
             }
+            .rbColumn(layout.readingWidth)
             .padding(.horizontal, 14)
             .padding(.bottom, 24)
         }
@@ -145,6 +149,7 @@ struct MoreView: View {
 // MARK: - Baron's Almanac (codex)
 
 struct AlmanacView: View {
+    @Environment(\.horizontalSizeClass) private var hSize
     private struct Entry: Identifiable { let id = UUID(); let title: String; let body: String }
 
     private let entries: [Entry] = [
@@ -179,6 +184,7 @@ struct AlmanacView: View {
                     }
                 }
             }
+            .rbColumn(RBLayout(hSize).readingWidth)
             .padding(.horizontal, 14)
             .padding(.bottom, 24)
         }

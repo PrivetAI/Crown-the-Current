@@ -2,7 +2,10 @@ import SwiftUI
 
 struct CampaignView: View {
     @ObservedObject var store = RBStore.shared
+    @Environment(\.horizontalSizeClass) private var hSize
     let startMatch: (MatchState, Bool) -> Void
+
+    private var layout: RBLayout { RBLayout(hSize) }
 
     var body: some View {
         ScrollView {
@@ -19,6 +22,7 @@ struct CampaignView: View {
                     actSection(act)
                 }
             }
+            .rbColumn(layout.gridWidth)
             .padding(.horizontal, 14)
             .padding(.bottom, 24)
         }
@@ -44,16 +48,26 @@ struct CampaignView: View {
         .buttonStyle(.plain)
     }
 
-    private func actSection(_ act: Int) -> some View {
+    @ViewBuilder private func actSection(_ act: Int) -> some View {
         let metas = RBScenarios.all.filter { $0.act == act }
-        return VStack(spacing: 12) {
+        VStack(spacing: 12) {
             RBArtBanner(imageName: "rb_act\(act)",
                         title: RBScenarios.actTitles[act - 1],
                         subtitle: RBScenarios.actTaglines[act - 1],
-                        height: 138)
+                        height: layout.regular ? 190 : 138)
                 .padding(.top, 4)
-            ForEach(metas) { meta in
-                scenarioCard(meta)
+            if layout.regular {
+                // Two scenario columns on iPad; the act's cards then read as a
+                // block instead of a 900pt-wide ladder of single rows.
+                LazyVGrid(columns: layout.columns(layout.listColumns, spacing: 12), spacing: 12) {
+                    ForEach(metas) { meta in
+                        scenarioCard(meta)
+                    }
+                }
+            } else {
+                ForEach(metas) { meta in
+                    scenarioCard(meta)
+                }
             }
         }
     }
@@ -108,9 +122,12 @@ struct CampaignView: View {
 
 struct ScenarioDetailView: View {
     @ObservedObject var store = RBStore.shared
+    @Environment(\.horizontalSizeClass) private var hSize
     let meta: RBScenarios.Meta
     let startMatch: (MatchState, Bool) -> Void
     @Environment(\.presentationMode) private var presentationMode
+
+    private var layout: RBLayout { RBLayout(hSize) }
 
     var body: some View {
         ScrollView {
@@ -118,7 +135,7 @@ struct ScenarioDetailView: View {
                 RBRibbonHeader(title: meta.title, subtitle: meta.tagline)
                     .padding(.top, 6)
 
-                RBArtBanner(imageName: scenarioArt, height: 150)
+                RBArtBanner(imageName: scenarioArt, height: layout.regular ? 220 : 150)
 
                 RBCard {
                     Text(meta.narration)
@@ -156,6 +173,7 @@ struct ScenarioDetailView: View {
                 .buttonStyle(RBButtonStyle())
                 .padding(.top, 4)
             }
+            .rbColumn(layout.readingWidth)
             .padding(.horizontal, 14)
             .padding(.bottom, 26)
         }

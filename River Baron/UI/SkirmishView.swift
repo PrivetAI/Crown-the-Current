@@ -2,6 +2,7 @@ import SwiftUI
 
 struct SkirmishView: View {
     @ObservedObject var store = RBStore.shared
+    @Environment(\.horizontalSizeClass) private var hSize
     let startMatch: (MatchState, Bool) -> Void
 
     @State private var size = 1
@@ -14,13 +15,15 @@ struct SkirmishView: View {
     private let personaOptions = ["merchant", "corsair", "engineer"]
     private let personaLabels = ["Merchant", "Corsair", "Engineer"]
 
+    private var layout: RBLayout { RBLayout(hSize) }
+
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
                 RBRibbonHeader(title: "Free Skirmish", subtitle: "A fresh river, generated to your taste")
                     .padding(.top, 6)
 
-                RBArtBanner(imageName: "rb_skirmish", height: 118)
+                RBArtBanner(imageName: "rb_skirmish", height: layout.regular ? 180 : 118)
 
                 if let match = store.root.activeSkirmishMatch {
                     resumeCard(turn: match.game.turn,
@@ -91,6 +94,7 @@ struct SkirmishView: View {
                 .buttonStyle(RBButtonStyle())
                 .padding(.top, 4)
             }
+            .rbColumn(layout.readingWidth)
             .padding(.horizontal, 14)
             .padding(.bottom, 26)
         }

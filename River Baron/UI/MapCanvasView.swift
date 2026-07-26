@@ -1,14 +1,35 @@
 import SwiftUI
 
+/// Chrome the camera must keep clear of: the HUD band, the End Turn banner and
+/// (on a regular-width side rail) the docked action panel. Every value is 0 on
+/// iPhone, which makes the viewport below exactly the full screen — i.e. the
+/// shipped phone camera math, unchanged.
+struct RBMapInset {
+    var top: CGFloat = 0
+    var bottom: CGFloat = 0
+    var trailing: CGFloat = 0
+}
+
 /// Camera transform shared by drawing and hit-testing. All math is anchored to
 /// the parent-passed screen size — never the Canvas closure's own size.
 struct RBCamera {
     var scale: CGFloat = 1
     var offset: CGSize = .zero
+    /// Reserved chrome. Zero on compact width.
+    var inset = RBMapInset()
+
+    /// The rectangle the river is fitted into and centred on. With zero insets
+    /// this is the whole screen.
+    func viewport(_ screen: CGSize) -> CGRect {
+        let w = max(1, screen.width - inset.trailing)
+        let h = max(1, screen.height - inset.top - inset.bottom)
+        return CGRect(x: 0, y: inset.top, width: w, height: h)
+    }
 
     func fitScale(screen: CGSize, mapW: CGFloat, mapH: CGFloat) -> CGFloat {
         guard mapW > 0, mapH > 0, screen.width > 0, screen.height > 0 else { return 1 }
-        return min(screen.width / mapW, screen.height / mapH) * 0.94
+        let v = viewport(screen)
+        return min(v.width / mapW, v.height / mapH) * 0.94
     }
 
     func totalScale(screen: CGSize, mapW: CGFloat, mapH: CGFloat) -> CGFloat {
@@ -17,17 +38,19 @@ struct RBCamera {
 
     func toScreen(_ world: CGPoint, screen: CGSize, mapW: CGFloat, mapH: CGFloat) -> CGPoint {
         let s = totalScale(screen: screen, mapW: mapW, mapH: mapH)
+        let v = viewport(screen)
         return CGPoint(
-            x: (world.x - mapW / 2) * s + screen.width / 2 + offset.width,
-            y: (world.y - mapH / 2) * s + screen.height / 2 + offset.height
+            x: (world.x - mapW / 2) * s + v.midX + offset.width,
+            y: (world.y - mapH / 2) * s + v.midY + offset.height
         )
     }
 
     func toWorld(_ pt: CGPoint, screen: CGSize, mapW: CGFloat, mapH: CGFloat) -> CGPoint {
         let s = max(0.0001, totalScale(screen: screen, mapW: mapW, mapH: mapH))
+        let v = viewport(screen)
         return CGPoint(
-            x: (pt.x - screen.width / 2 - offset.width) / s + mapW / 2,
-            y: (pt.y - screen.height / 2 - offset.height) / s + mapH / 2
+            x: (pt.x - v.midX - offset.width) / s + mapW / 2,
+            y: (pt.y - v.midY - offset.height) / s + mapH / 2
         )
     }
 }

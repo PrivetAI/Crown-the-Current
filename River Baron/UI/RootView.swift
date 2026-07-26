@@ -10,6 +10,7 @@ struct MatchLaunchItem: Identifiable {
 /// plus the fullscreen match router and the global achievement toast.
 struct RootView: View {
     @ObservedObject var store = RBStore.shared
+    @Environment(\.horizontalSizeClass) private var hSize
     @State private var tab = 0
     @State private var session: MatchLaunchItem? = nil
     /// A brand-new match held back because an unfinished one of the same mode
@@ -111,6 +112,7 @@ struct RootView: View {
                 AnyView(RBBookIcon().stroke($0, style: StrokeStyle(lineWidth: 2, lineCap: .round, lineJoin: .round)))
             }
         }
+        .rbColumn(RBLayout(hSize).tabBarWidth)
         .padding(.top, 8)
         .padding(.bottom, 4)
         .background(

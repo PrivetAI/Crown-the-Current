@@ -2,14 +2,20 @@ import SwiftUI
 
 struct ChronicleView: View {
     @ObservedObject var store = RBStore.shared
+    @Environment(\.horizontalSizeClass) private var hSize
     @State private var section = 0
+
+    private var layout: RBLayout { RBLayout(hSize) }
 
     var body: some View {
         VStack(spacing: 0) {
             RBRibbonHeader(title: "Chronicle")
-                .padding(.top, 6).padding(.horizontal, 14)
+                .padding(.top, 6)
+                .rbColumn(layout.gridWidth)
+                .padding(.horizontal, 14)
 
-            RBArtBanner(imageName: "rb_chronicle", height: 104)
+            RBArtBanner(imageName: "rb_chronicle", height: layout.regular ? 170 : 104)
+                .rbColumn(layout.gridWidth)
                 .padding(.horizontal, 14).padding(.top, 10)
 
             HStack(spacing: 6) {
@@ -17,6 +23,7 @@ struct ChronicleView: View {
                 tab("Banners", 1)
                 tab("Honours", 2)
             }
+            .rbColumn(layout.readingWidth)
             .padding(.horizontal, 14).padding(.vertical, 10)
 
             ScrollView {
@@ -27,6 +34,7 @@ struct ChronicleView: View {
                     default: honoursSection
                     }
                 }
+                .rbColumn(layout.gridWidth)
                 .padding(.horizontal, 14)
                 .padding(.bottom, 24)
             }
@@ -52,7 +60,7 @@ struct ChronicleView: View {
         let s = store.root.stats
         return VStack(spacing: 12) {
             RBCard {
-                LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 12) {
+                LazyVGrid(columns: layout.columns(layout.tileColumns), spacing: 12) {
                     statTile("Campaign Stars", "\(store.root.totalStars)/42")
                     statTile("Matches Won", "\(s.matchesWon)")
                     statTile("Matches Played", "\(s.matchesPlayed)")
@@ -86,7 +94,7 @@ struct ChronicleView: View {
             Text("Choose the colors you sail under. New banners unlock as you conquer the river.")
                 .font(RBTheme.body(13)).foregroundColor(RBTheme.inkSoft)
                 .multilineTextAlignment(.center)
-            LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 12) {
+            LazyVGrid(columns: layout.columns(layout.regular ? 3 : 2), spacing: 12) {
                 ForEach(0..<RBTheme.banners.count, id: \.self) { i in
                     bannerCard(i)
                 }
@@ -159,6 +167,7 @@ struct ChronicleView: View {
                 .opacity(got ? 1 : 0.75)
             }
         }
+        .rbColumn(layout.readingWidth)
     }
 }
 

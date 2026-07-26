@@ -432,3 +432,50 @@ struct RBLaurelIcon: Shape {
         return p
     }
 }
+
+// MARK: - Adaptive layout (iPhone / iPad)
+
+/// Size-class driven layout metrics.
+///
+/// Every value is deliberately inert on `.compact`: `.infinity` measures and a
+/// single column mean the modifiers below apply *nothing at all* on iPhone, so
+/// the shipped phone layout is byte-identical. Only `.regular` (iPad) picks up
+/// the wider treatment.
+struct RBLayout {
+    let regular: Bool
+
+    init(_ sizeClass: UserInterfaceSizeClass?) {
+        regular = (sizeClass == .regular)
+    }
+
+    /// Measure for prose and forms — long lines are unreadable across 1000pt.
+    var readingWidth: CGFloat { regular ? 720 : .infinity }
+    /// Measure for card grids, which can afford to be wider than prose.
+    var gridWidth: CGFloat { regular ? 920 : .infinity }
+    /// The custom tab bar; a 1366pt-wide row of four tabs looks unmoored.
+    var tabBarWidth: CGFloat { regular ? 640 : .infinity }
+    /// The match action panel and End Turn banner.
+    var panelWidth: CGFloat { regular ? 640 : .infinity }
+
+    /// Columns for the scenario / banner / stat grids.
+    var listColumns: Int { regular ? 2 : 1 }
+    var tileColumns: Int { regular ? 4 : 2 }
+
+    /// `spacing: nil` keeps SwiftUI's own default gap, so a grid that changes
+    /// only its column *count* is otherwise untouched on iPhone.
+    func columns(_ count: Int, spacing: CGFloat? = nil) -> [GridItem] {
+        Array(repeating: GridItem(.flexible(), spacing: spacing), count: count)
+    }
+}
+
+extension View {
+    /// Centres the view inside a capped column. A `.infinity` cap (compact)
+    /// applies no modifier whatsoever.
+    @ViewBuilder func rbColumn(_ maxWidth: CGFloat) -> some View {
+        if maxWidth == .infinity {
+            self
+        } else {
+            self.frame(maxWidth: maxWidth).frame(maxWidth: .infinity)
+        }
+    }
+}

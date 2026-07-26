@@ -5,6 +5,7 @@ import SwiftUI
 struct MatchScreen: View {
     @ObservedObject var controller: MatchController
     @ObservedObject var store = RBStore.shared
+    @Environment(\.horizontalSizeClass) private var hSize
     let onExit: () -> Void
 
     @State private var camera = RBCamera()
@@ -17,6 +18,11 @@ struct MatchScreen: View {
 
     private var state: GameState { controller.state }
 
+    private var layout: RBLayout { RBLayout(hSize) }
+
+    /// Width of the docked action rail on a regular-width landscape screen.
+    private let railWidth: CGFloat = 360
+
     var body: some View {
         GeometryReader { geo in
             ZStack {
@@ -24,10 +30,24 @@ struct MatchScreen: View {
 
                 mapLayer(geo.size)
 
-                VStack(spacing: 0) {
-                    hud
-                    Spacer(minLength: 0)
-                    bottomArea(geo.size.height)
+                if useSideRail(geo.size) {
+                    VStack(spacing: 0) {
+                        hud
+                        HStack(alignment: .top, spacing: 0) {
+                            Spacer(minLength: 0)
+                            sideRail(geo.size)
+                                .frame(width: railWidth)
+                                .padding(.trailing, 12)
+                                .padding(.vertical, 12)
+                        }
+                        .frame(maxHeight: .infinity)
+                    }
+                } else {
+                    VStack(spacing: 0) {
+                        hud
+                        Spacer(minLength: 0)
+                        bottomArea(geo.size.height)
+                    }
                 }
 
                 overlays
@@ -43,11 +63,31 @@ struct MatchScreen: View {
 
     // MARK: - Map + gestures
 
+    /// On a regular-width landscape screen the action panel docks into a side
+    /// rail; in portrait it stays at the bottom, capped and centred.
+    private func useSideRail(_ size: CGSize) -> Bool {
+        layout.regular && size.width > size.height
+    }
+
+    /// Chrome the river must stay clear of. All zero on compact width, so the
+    /// iPhone camera fit is exactly what shipped: the map is framed against the
+    /// full screen. On iPad the fit is taken against the *usable* rectangle
+    /// instead, so the whole river frames sensibly beside the HUD and the panel
+    /// rather than running underneath them.
+    private func mapInset(_ size: CGSize) -> RBMapInset {
+        guard layout.regular else { return RBMapInset() }
+        if useSideRail(size) {
+            return RBMapInset(top: 104, bottom: 32, trailing: railWidth + 24)
+        }
+        return RBMapInset(top: 104, bottom: 288)
+    }
+
     private func effectiveCamera(_ size: CGSize) -> RBCamera {
         var c = camera
         c.scale = min(3.5, max(0.55, camera.scale * pinch))
         c.offset = CGSize(width: camera.offset.width + dragT.width,
                           height: camera.offset.height + dragT.height)
+        c.inset = mapInset(size)
         return c
     }
 
@@ -162,6 +202,7 @@ struct MatchScreen: View {
                 .background(Capsule().fill(RBTheme.riverLight.opacity(0.22)))
             }
         }
+        .rbColumn(layout.gridWidth)
         .padding(.horizontal, 12)
         .padding(.vertical, 8)
         .background(
@@ -200,6 +241,9 @@ struct MatchScreen: View {
     /// under the HUD and cover the map controls.
     private func panelCap(_ screenHeight: CGFloat) -> CGFloat {
         let chrome: CGFloat = 178   // HUD + End Turn banner + paddings
+        // On iPad the map reserves a fixed bottom band (see `mapInset`), so the
+        // panel is held to that band instead of growing over the river.
+        if layout.regular { return max(160, min(220, screenHeight - chrome)) }
         return max(120, min(250, screenHeight - chrome))
     }
 
@@ -211,6 +255,7 @@ struct MatchScreen: View {
                                  maxPanelHeight: panelCap(screenHeight),
                                  onClose: { controller.deselect() })
                     .padding(.horizontal, 10)
+                    .rbColumn(layout.panelWidth)
                     .transition(.move(edge: .bottom).combined(with: .opacity))
             }
 
@@ -241,6 +286,46 @@ struct MatchScreen: View {
         .buttonStyle(.plain)
         .disabled(!enabled)
         .padding(.horizontal, 14)
+        .rbColumn(layout.panelWidth)
+    }
+
+    // MARK: - Side rail (regular width, landscape)
+
+    /// The docked rail: the tapped landing's action panel (or a standing hint
+    /// when nothing is selected) above the End Turn banner.
+    private func sideRail(_ size: CGSize) -> some View {
+        VStack(spacing: 10) {
+            if let sel = controller.selectedNodeID, let node = state.node(sel) {
+                MatchActionPanel(controller: controller, node: node,
+                                 damPickerNode: $damPickerNode,
+                                 maxPanelHeight: max(200, size.height - 340),
+                                 onClose: { controller.deselect() })
+                    .transition(.move(edge: .trailing).combined(with: .opacity))
+            } else {
+                railHint
+            }
+
+            Spacer(minLength: 0)
+
+            if controller.aiThinking {
+                banner(text: "The barons are moving...", fill: RBTheme.navy.opacity(0.85), enabled: false) {}
+            } else if controller.humanTurn {
+                banner(text: "End Turn", fill: RBTheme.navy, enabled: true) {
+                    withAnimation { controller.endTurn() }
+                }
+            }
+        }
+    }
+
+    private var railHint: some View {
+        RBCard {
+            VStack(alignment: .leading, spacing: 6) {
+                Text("The River").font(RBTheme.display(16)).foregroundColor(RBTheme.navy)
+                Text("Tap a landing to read it and to order the fleet standing there. Downstream costs 1 move, upstream 2.")
+                    .font(RBTheme.body(13)).foregroundColor(RBTheme.inkSoft)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+        }
     }
 
     // MARK: - Overlays
