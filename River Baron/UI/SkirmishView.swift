@@ -2,7 +2,7 @@ import SwiftUI
 
 struct SkirmishView: View {
     @ObservedObject var store = RBStore.shared
-    let startMatch: (MatchState) -> Void
+    let startMatch: (MatchState, Bool) -> Void
 
     @State private var size = 1
     @State private var opponents = 2
@@ -22,9 +22,9 @@ struct SkirmishView: View {
 
                 RBArtBanner(imageName: "rb_skirmish", height: 118)
 
-                if let match = store.root.activeMatch, match.mode == "skirmish" {
+                if let match = store.root.activeSkirmishMatch {
                     resumeCard(turn: match.game.turn,
-                               nodes: match.game.nodes.count) { startMatch(match) }
+                               nodes: match.game.nodes.count) { startMatch(match, false) }
                 }
 
                 optionCard(title: "River Size") {
@@ -173,6 +173,6 @@ struct SkirmishView: View {
         ms.mode = "skirmish"
         ms.skirmish = config
         ms.game = game
-        startMatch(ms)
+        startMatch(ms, true)
     }
 }

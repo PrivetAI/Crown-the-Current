@@ -57,6 +57,8 @@ struct MoreView: View {
                                 RBChevron(pointRight: true).stroke(RBTheme.inkSoft, style: StrokeStyle(lineWidth: 2, lineCap: .round))
                                     .frame(width: 9, height: 15)
                             }
+                            .padding(.vertical, 4)
+                            .contentShape(Rectangle())
                         }
                         .buttonStyle(.plain)
                     }
@@ -88,6 +90,8 @@ struct MoreView: View {
                                     Text("Reset All Progress").font(RBTheme.body(14)).foregroundColor(RBTheme.danger)
                                     Spacer()
                                 }
+                                .padding(.vertical, 4)
+                                .contentShape(Rectangle())
                             }
                             .buttonStyle(.plain)
                         }
@@ -132,6 +136,7 @@ struct MoreView: View {
                 }
             }
             .padding(.vertical, 4)
+            .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
     }

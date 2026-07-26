@@ -1,5 +1,39 @@
 import SwiftUI
 
+// MARK: - Shrink-to-fit scrolling body
+
+/// A ScrollView fills whatever height it is offered, so a two-line summary was
+/// rendering inside a 340pt slab of empty parchment. Measuring the content lets
+/// the card hug short news while still capping and scrolling a long turn.
+private struct RBHeightKey: PreferenceKey {
+    static var defaultValue: CGFloat = 0
+    static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
+        value = max(value, nextValue())
+    }
+}
+
+private struct RBFittedScroll<Content: View>: View {
+    let cap: CGFloat
+    let content: Content
+    @State private var contentHeight: CGFloat = 0
+
+    init(cap: CGFloat, @ViewBuilder content: () -> Content) {
+        self.cap = cap
+        self.content = content()
+    }
+
+    var body: some View {
+        ScrollView {
+            content
+                .background(GeometryReader { g in
+                    Color.clear.preference(key: RBHeightKey.self, value: g.size.height)
+                })
+        }
+        .frame(height: contentHeight > 0 ? min(contentHeight, cap) : nil)
+        .onPreferenceChange(RBHeightKey.self) { contentHeight = $0 }
+    }
+}
+
 // MARK: - Dim scrim wrapper
 
 private struct RBScrim<Content: View>: View {
@@ -42,9 +76,10 @@ struct BattleMathView: View {
                          mods: [("harbor", report.defHarbor), ("dock", report.defDock)],
                          total: report.defTotal, win: !report.attackerWon)
             }
-            let winner = report.attackerWon ? name(report.attacker) : name(report.defender)
+            let winnerOwner = report.attackerWon ? report.attacker : report.defender
+            let winner = name(winnerOwner)
             HStack(spacing: 5) {
-                Text("\(winner) prevails")
+                Text("\(winner) \(RBEngine.verb(winnerOwner, "prevail", "prevails"))")
                     .font(RBTheme.body(13)).foregroundColor(RBTheme.good)
                 if report.winnerLoss > 0 {
                     Text("(lost \(report.winnerLoss) strength)")
@@ -84,14 +119,13 @@ struct BattleReviewOverlay: View {
         RBScrim {
             VStack(spacing: 14) {
                 RBRibbonHeader(title: reports.count > 1 ? "Battle Reports" : "Battle Report")
-                ScrollView {
+                RBFittedScroll(cap: 320) {
                     VStack(spacing: 10) {
                         ForEach(reports) { r in
                             BattleMathView(report: r, detail: detail, players: players)
                         }
                     }
                 }
-                .frame(maxHeight: 320)
                 Button(action: onDismiss) { Text("Continue").frame(maxWidth: .infinity) }
                     .buttonStyle(RBButtonStyle())
             }
@@ -115,7 +149,7 @@ struct TurnSummaryOverlay: View {
         RBScrim {
             VStack(spacing: 14) {
                 RBRibbonHeader(title: "The River Turns")
-                ScrollView {
+                RBFittedScroll(cap: 340) {
                     VStack(alignment: .leading, spacing: 10) {
                         if !notices.isEmpty {
                             VStack(alignment: .leading, spacing: 7) {
@@ -140,8 +174,8 @@ struct TurnSummaryOverlay: View {
                         }
                     }
                     .padding(.horizontal, 2)
+                    .frame(maxWidth: .infinity, alignment: .leading)
                 }
-                .frame(maxHeight: 340)
                 Button(action: onDismiss) { Text("To your turn").frame(maxWidth: .infinity) }
                     .buttonStyle(RBButtonStyle())
             }

@@ -12,6 +12,9 @@ struct RootView: View {
     @ObservedObject var store = RBStore.shared
     @State private var tab = 0
     @State private var session: MatchLaunchItem? = nil
+    /// A brand-new match held back because an unfinished one of the same mode
+    /// would be overwritten; launched only once the baron confirms.
+    @State private var pendingStart: MatchState? = nil
 
     var body: some View {
         ZStack(alignment: .bottom) {
@@ -54,13 +57,49 @@ struct RootView: View {
         .fullScreenCover(item: $session) { item in
             MatchScreen(controller: item.controller, onExit: { session = nil })
         }
+        .alert("Abandon the unfinished match?",
+               isPresented: Binding(get: { pendingStart != nil },
+                                    set: { if !$0 { pendingStart = nil } })) {
+            Button("Cancel", role: .cancel) { pendingStart = nil }
+            Button("Abandon & Sail", role: .destructive) {
+                let match = pendingStart
+                pendingStart = nil
+                if let match = match { launch(match) }
+            }
+        } message: {
+            Text(overwriteMessage)
+        }
     }
 
-    private func start(_ match: MatchState) {
-        store.root.activeMatch = match
+    /// `isNew` marks a freshly generated match. Resuming passes false and always
+    /// goes straight through; a new match first asks before discarding an
+    /// unfinished save in the same mode.
+    private func start(_ match: MatchState, isNew: Bool) {
+        if isNew, store.root.activeMatch(mode: match.mode) != nil {
+            pendingStart = match
+            return
+        }
+        launch(match)
+    }
+
+    private func launch(_ match: MatchState) {
+        store.root.setActiveMatch(match, mode: match.mode)
         store.save()
         let controller = MatchController(match: match, store: store)
         session = MatchLaunchItem(controller: controller)
+    }
+
+    private var overwriteMessage: String {
+        guard let mode = pendingStart?.mode else { return "" }
+        if mode == "campaign",
+           let saved = store.root.activeCampaignMatch,
+           let meta = RBScenarios.meta(saved.scenarioID) {
+            return "\(meta.title) is still unfinished at turn \(saved.game.turn). Setting sail now abandons that match for good."
+        }
+        if let saved = store.root.activeSkirmishMatch {
+            return "A skirmish is still unfinished at turn \(saved.game.turn). Generating a new river abandons that match for good."
+        }
+        return "An unfinished match will be abandoned for good."
     }
 
     private var tabBar: some View {

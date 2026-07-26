@@ -2,7 +2,7 @@ import SwiftUI
 
 struct CampaignView: View {
     @ObservedObject var store = RBStore.shared
-    let startMatch: (MatchState) -> Void
+    let startMatch: (MatchState, Bool) -> Void
 
     var body: some View {
         ScrollView {
@@ -10,9 +10,9 @@ struct CampaignView: View {
                 RBRibbonHeader(title: "The Campaign", subtitle: "\(store.root.totalStars) of 42 stars earned")
                     .padding(.top, 6)
 
-                if let match = store.root.activeMatch, match.mode == "campaign",
+                if let match = store.root.activeCampaignMatch,
                    let meta = RBScenarios.meta(match.scenarioID) {
-                    resumeCard(meta: meta, turn: match.game.turn) { startMatch(match) }
+                    resumeCard(meta: meta, turn: match.game.turn) { startMatch(match, false) }
                 }
 
                 ForEach(1...3, id: \.self) { act in
@@ -109,7 +109,7 @@ struct CampaignView: View {
 struct ScenarioDetailView: View {
     @ObservedObject var store = RBStore.shared
     let meta: RBScenarios.Meta
-    let startMatch: (MatchState) -> Void
+    let startMatch: (MatchState, Bool) -> Void
     @Environment(\.presentationMode) private var presentationMode
 
     var body: some View {
@@ -193,6 +193,6 @@ struct ScenarioDetailView: View {
         ms.scenarioID = meta.id
         ms.game = game
         presentationMode.wrappedValue.dismiss()
-        startMatch(ms)
+        startMatch(ms, true)
     }
 }

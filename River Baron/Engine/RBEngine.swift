@@ -33,6 +33,13 @@ enum RBEngine {
         return s.players[owner].name
     }
 
+    /// The human seat reads in the second person ("You") and the raiders are
+    /// plural ("Pirates"); both take the bare verb. Named rivals take the
+    /// third-person -s. Keeps notices from reading "You claims Willowford."
+    static func verb(_ owner: Int, _ bare: String, _ thirdPerson: String) -> String {
+        (owner == 0 || owner == -1) ? bare : thirdPerson
+    }
+
     static func baseIncome(_ kind: RBNodeKind) -> Int {
         switch kind {
         case .harbor: return 3
@@ -108,7 +115,7 @@ enum RBEngine {
             let held = s.players[p].mouthTurns
             s.log.append("T\(s.turn) P\(p) holds Mouth (\(held)/\(mouthHoldNeeded))")
             if held < mouthHoldNeeded {
-                s.notices.append("\(s.players[p].name) holds the Mouth (\(held)/\(mouthHoldNeeded) turns).")
+                s.notices.append("\(s.players[p].name) \(verb(p, "hold", "holds")) the Mouth (\(held)/\(mouthHoldNeeded) turns).")
             }
             if held >= mouthHoldNeeded {
                 declareWinner(&s, p, kind: "mouth")
@@ -150,7 +157,7 @@ enum RBEngine {
         s.winKind = kind
         let name = (p >= 0 && p < s.players.count) ? s.players[p].name : "Nobody"
         s.log.append("WINNER P\(p) by \(kind)")
-        s.notices.append("\(name) rules the river (\(kind)).")
+        s.notices.append("\(name) \(verb(p, "rule", "rules")) the river (\(kind)).")
     }
 
     /// Most nodes at the turn cap; ties: florins, then seat order.
@@ -184,7 +191,7 @@ enum RBEngine {
                     s.edges[j].damOwner = -1
                 }
                 s.log.append("T\(s.turn) P\(p) eliminated")
-                s.notices.append("\(s.players[i].name) has been driven from the river!")
+                s.notices.append("\(s.players[i].name) \(verb(p, "have", "has")) been driven from the river!")
             }
         }
     }
@@ -436,7 +443,7 @@ enum RBEngine {
         }
         let nm = s.nodes[ni].name
         if p >= 0 && p < s.players.count {
-            s.notices.append("\(s.players[p].name) claims \(nm).")
+            s.notices.append("\(s.players[p].name) \(verb(p, "claim", "claims")) \(nm).")
         }
         s.log.append("T\(s.turn) P\(p) capture \(nodeID)")
         checkConfluenceCrown(&s)
@@ -536,7 +543,8 @@ enum RBEngine {
         s.pendingReports.append(report)
         let aName = ownerName(p, in: s)
         let dName = ownerName(dOwner, in: s)
-        s.notices.append("Battle at \(node.name): \(aName) \(atkTotal) vs \(dName) \(defTotal) — \(attackerWon ? aName : dName) prevails.")
+        let wOwner = attackerWon ? p : dOwner
+        s.notices.append("Battle at \(node.name): \(aName) \(atkTotal) vs \(dName) \(defTotal) — \(attackerWon ? aName : dName) \(verb(wOwner, "prevail", "prevails")).")
         s.log.append("T\(s.turn) battle at \(nodeID) A\(p) \(atkTotal) vs D\(dOwner) \(defTotal) \(attackerWon ? "A" : "D") roll \(roll)")
     }
 

@@ -61,7 +61,10 @@ struct RootState: Codable {
     var stats: RBStats = RBStats()
     var selectedBanner: Int = 0
     var settings: RBSettingsState = RBSettingsState()
-    var activeMatch: MatchState? = nil
+    /// Campaign and skirmish keep separate save slots: starting one mode must
+    /// never destroy an unfinished match of the other.
+    var activeCampaignMatch: MatchState? = nil
+    var activeSkirmishMatch: MatchState? = nil
     var onboardingDone: Bool = false
 
     init() {}
@@ -73,12 +76,36 @@ struct RootState: Codable {
         stats = try c.decodeIfPresent(RBStats.self, forKey: .stats) ?? RBStats()
         selectedBanner = try c.decodeIfPresent(Int.self, forKey: .selectedBanner) ?? 0
         settings = try c.decodeIfPresent(RBSettingsState.self, forKey: .settings) ?? RBSettingsState()
-        activeMatch = try c.decodeIfPresent(MatchState.self, forKey: .activeMatch)
+        activeCampaignMatch = try c.decodeIfPresent(MatchState.self, forKey: .activeCampaignMatch)
+        activeSkirmishMatch = try c.decodeIfPresent(MatchState.self, forKey: .activeSkirmishMatch)
         onboardingDone = try c.decodeIfPresent(Bool.self, forKey: .onboardingDone) ?? false
+
+        // Saves written before the split kept one shared slot; carry whatever
+        // it held into the slot its own mode owns so no progress is stranded.
+        let legacy = try decoder.container(keyedBy: LegacyCodingKeys.self)
+        if let old = try legacy.decodeIfPresent(MatchState.self, forKey: .activeMatch) {
+            if old.mode == "campaign" {
+                if activeCampaignMatch == nil { activeCampaignMatch = old }
+            } else if activeSkirmishMatch == nil {
+                activeSkirmishMatch = old
+            }
+        }
     }
 
     private enum CodingKeys: String, CodingKey {
-        case scenarioStars, achievements, stats, selectedBanner, settings, activeMatch, onboardingDone
+        case scenarioStars, achievements, stats, selectedBanner, settings
+        case activeCampaignMatch, activeSkirmishMatch, onboardingDone
+    }
+
+    private enum LegacyCodingKeys: String, CodingKey { case activeMatch }
+
+    /// The unfinished match saved for a mode, if any.
+    func activeMatch(mode: String) -> MatchState? {
+        mode == "campaign" ? activeCampaignMatch : activeSkirmishMatch
+    }
+
+    mutating func setActiveMatch(_ match: MatchState?, mode: String) {
+        if mode == "campaign" { activeCampaignMatch = match } else { activeSkirmishMatch = match }
     }
 
     var totalStars: Int { scenarioStars.values.reduce(0, +) }
@@ -278,7 +305,7 @@ final class RBStore: ObservableObject {
         if root.totalStars >= 42 { unlock("star_all") }
         if root.stats.fleetsSunk >= 50 { unlock("sunk_50") }
 
-        root.activeMatch = nil
+        root.setActiveMatch(nil, mode: mode)
         save()
         return stars
     }

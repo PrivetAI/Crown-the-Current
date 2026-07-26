@@ -229,7 +229,7 @@ final class MatchController: ObservableObject {
         ms.scenarioID = scenarioID
         ms.skirmish = skirmish
         ms.game = state
-        store.root.activeMatch = ms
+        store.root.setActiveMatch(ms, mode: mode)
         store.save()
     }
 
