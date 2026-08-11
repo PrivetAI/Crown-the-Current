@@ -2,7 +2,7 @@ import Foundation
 
 // MARK: - Core enums
 
-enum RBNodeKind: String, Codable {
+enum CTCNodeKind: String, Codable {
     case harbor      // income 3, defender +1
     case island      // income 2
     case confluence  // income 4
@@ -11,10 +11,10 @@ enum RBNodeKind: String, Codable {
 
 // MARK: - Node
 
-struct RBNode: Codable, Identifiable, Equatable {
+struct CTCNode: Codable, Identifiable, Equatable {
     var id: Int = 0
     var name: String = ""
-    var kind: RBNodeKind = .harbor
+    var kind: CTCNodeKind = .harbor
     var x: Double = 0
     var y: Double = 0
     var owner: Int = -1        // player index; -1 = neutral
@@ -25,7 +25,7 @@ struct RBNode: Codable, Identifiable, Equatable {
 
     init() {}
 
-    init(id: Int, name: String, kind: RBNodeKind, x: Double, y: Double) {
+    init(id: Int, name: String, kind: CTCNodeKind, x: Double, y: Double) {
         self.id = id; self.name = name; self.kind = kind; self.x = x; self.y = y
     }
 
@@ -33,7 +33,7 @@ struct RBNode: Codable, Identifiable, Equatable {
         let c = try decoder.container(keyedBy: CodingKeys.self)
         id = try c.decodeIfPresent(Int.self, forKey: .id) ?? 0
         name = try c.decodeIfPresent(String.self, forKey: .name) ?? ""
-        kind = try c.decodeIfPresent(RBNodeKind.self, forKey: .kind) ?? .harbor
+        kind = try c.decodeIfPresent(CTCNodeKind.self, forKey: .kind) ?? .harbor
         x = try c.decodeIfPresent(Double.self, forKey: .x) ?? 0
         y = try c.decodeIfPresent(Double.self, forKey: .y) ?? 0
         owner = try c.decodeIfPresent(Int.self, forKey: .owner) ?? -1
@@ -50,7 +50,7 @@ struct RBNode: Codable, Identifiable, Equatable {
 
 // MARK: - Edge (river reach, directed: from = upstream, to = downstream)
 
-struct RBEdge: Codable, Identifiable, Equatable {
+struct CTCEdge: Codable, Identifiable, Equatable {
     var id: Int = 0
     var from: Int = 0          // upstream node id
     var to: Int = 0            // downstream node id
@@ -77,7 +77,7 @@ struct RBEdge: Codable, Identifiable, Equatable {
 
 // MARK: - Fleet
 
-struct RBFleet: Codable, Identifiable, Equatable {
+struct CTCFleet: Codable, Identifiable, Equatable {
     var id: Int = 0
     var owner: Int = 0       // player index; -1 = pirates
     var node: Int = 0
@@ -105,7 +105,7 @@ struct RBFleet: Codable, Identifiable, Equatable {
 
 // MARK: - Player
 
-struct RBPlayer: Codable, Equatable {
+struct CTCPlayer: Codable, Equatable {
     var idx: Int = 0
     var name: String = ""
     var colorID: Int = 0       // banner color index
@@ -145,7 +145,7 @@ struct RBPlayer: Codable, Equatable {
 
 // MARK: - Battle report (popup content: the math is shown)
 
-struct RBBattleReport: Codable, Identifiable, Equatable {
+struct CTCBattleReport: Codable, Identifiable, Equatable {
     var id: Int = 0
     var turn: Int = 0
     var nodeID: Int = 0
@@ -195,14 +195,14 @@ struct RBBattleReport: Codable, Identifiable, Equatable {
 // MARK: - Game state (single Codable snapshot; every field decodeIfPresent)
 
 struct GameState: Codable {
-    var nodes: [RBNode] = []
-    var edges: [RBEdge] = []
-    var fleets: [RBFleet] = []
-    var players: [RBPlayer] = []
+    var nodes: [CTCNode] = []
+    var edges: [CTCEdge] = []
+    var fleets: [CTCFleet] = []
+    var players: [CTCPlayer] = []
     var turn: Int = 1
     var currentPlayer: Int = 0
     var turnCap: Int = 24
-    var rng: RBRandom = RBRandom()
+    var rng: CTCRandom = CTCRandom()
     var nextFleetID: Int = 1
     var nextReportID: Int = 1
     var mouthID: Int = 0
@@ -212,7 +212,7 @@ struct GameState: Codable {
     var piratesOn: Bool = false
     var winner: Int = -9            // -9 = none yet; else player index
     var winKind: String = ""        // mouth / elimination / nodes
-    var pendingReports: [RBBattleReport] = []
+    var pendingReports: [CTCBattleReport] = []
     var notices: [String] = []      // events since the human's last look (UI clears)
     var log: [String] = []          // deterministic action log (harness + debugging)
     var battlesCount: Int = 0
@@ -231,14 +231,14 @@ struct GameState: Codable {
 
     init(from decoder: Decoder) throws {
         let c = try decoder.container(keyedBy: CodingKeys.self)
-        nodes = try c.decodeIfPresent([RBNode].self, forKey: .nodes) ?? []
-        edges = try c.decodeIfPresent([RBEdge].self, forKey: .edges) ?? []
-        fleets = try c.decodeIfPresent([RBFleet].self, forKey: .fleets) ?? []
-        players = try c.decodeIfPresent([RBPlayer].self, forKey: .players) ?? []
+        nodes = try c.decodeIfPresent([CTCNode].self, forKey: .nodes) ?? []
+        edges = try c.decodeIfPresent([CTCEdge].self, forKey: .edges) ?? []
+        fleets = try c.decodeIfPresent([CTCFleet].self, forKey: .fleets) ?? []
+        players = try c.decodeIfPresent([CTCPlayer].self, forKey: .players) ?? []
         turn = try c.decodeIfPresent(Int.self, forKey: .turn) ?? 1
         currentPlayer = try c.decodeIfPresent(Int.self, forKey: .currentPlayer) ?? 0
         turnCap = try c.decodeIfPresent(Int.self, forKey: .turnCap) ?? 24
-        rng = try c.decodeIfPresent(RBRandom.self, forKey: .rng) ?? RBRandom()
+        rng = try c.decodeIfPresent(CTCRandom.self, forKey: .rng) ?? CTCRandom()
         nextFleetID = try c.decodeIfPresent(Int.self, forKey: .nextFleetID) ?? 1
         nextReportID = try c.decodeIfPresent(Int.self, forKey: .nextReportID) ?? 1
         mouthID = try c.decodeIfPresent(Int.self, forKey: .mouthID) ?? 0
@@ -248,7 +248,7 @@ struct GameState: Codable {
         piratesOn = try c.decodeIfPresent(Bool.self, forKey: .piratesOn) ?? false
         winner = try c.decodeIfPresent(Int.self, forKey: .winner) ?? -9
         winKind = try c.decodeIfPresent(String.self, forKey: .winKind) ?? ""
-        pendingReports = try c.decodeIfPresent([RBBattleReport].self, forKey: .pendingReports) ?? []
+        pendingReports = try c.decodeIfPresent([CTCBattleReport].self, forKey: .pendingReports) ?? []
         notices = try c.decodeIfPresent([String].self, forKey: .notices) ?? []
         log = try c.decodeIfPresent([String].self, forKey: .log) ?? []
         battlesCount = try c.decodeIfPresent(Int.self, forKey: .battlesCount) ?? 0
@@ -287,7 +287,7 @@ struct GameState: Codable {
 
     // MARK: convenience lookups (all guarded)
 
-    func node(_ id: Int) -> RBNode? {
+    func node(_ id: Int) -> CTCNode? {
         for n in nodes where n.id == id { return n }
         return nil
     }
@@ -302,7 +302,7 @@ struct GameState: Codable {
         return nil
     }
 
-    func fleet(_ id: Int) -> RBFleet? {
+    func fleet(_ id: Int) -> CTCFleet? {
         for f in fleets where f.id == id { return f }
         return nil
     }
@@ -312,20 +312,20 @@ struct GameState: Codable {
         return nil
     }
 
-    func fleetsAt(_ nodeID: Int) -> [RBFleet] {
+    func fleetsAt(_ nodeID: Int) -> [CTCFleet] {
         fleets.filter { $0.node == nodeID }.sorted { $0.id < $1.id }
     }
 
-    func edgeBetween(_ a: Int, _ b: Int) -> RBEdge? {
+    func edgeBetween(_ a: Int, _ b: Int) -> CTCEdge? {
         for e in edges where (e.from == a && e.to == b) || (e.from == b && e.to == a) { return e }
         return nil
     }
 
-    func ownedNodes(_ player: Int) -> [RBNode] {
+    func ownedNodes(_ player: Int) -> [CTCNode] {
         nodes.filter { $0.owner == player }.sorted { $0.id < $1.id }
     }
 
-    func ownedFleets(_ player: Int) -> [RBFleet] {
+    func ownedFleets(_ player: Int) -> [CTCFleet] {
         fleets.filter { $0.owner == player }.sorted { $0.id < $1.id }
     }
 

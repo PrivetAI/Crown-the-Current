@@ -1,38 +1,38 @@
 import SwiftUI
 
 struct MoreView: View {
-    @ObservedObject var store = RBStore.shared
+    @ObservedObject var store = CTCStore.shared
     @Environment(\.horizontalSizeClass) private var hSize
     @State private var showPrivacy = false
     @State private var confirmReset = false
 
-    private var layout: RBLayout { RBLayout(hSize) }
+    private var layout: CTCLayout { CTCLayout(hSize) }
 
     var body: some View {
         ScrollView {
             VStack(spacing: 16) {
-                RBRibbonHeader(title: "More").padding(.top, 6)
+                CTCRibbonHeader(title: "More").padding(.top, 6)
 
                 NavigationLink(destination: AlmanacView()) {
-                    RBCard {
+                    CTCCard {
                         HStack(spacing: 12) {
-                            RBBookIcon().stroke(RBTheme.navy, style: StrokeStyle(lineWidth: 2, lineCap: .round, lineJoin: .round))
+                            CTCBookIcon().stroke(CTCTheme.navy, style: StrokeStyle(lineWidth: 2, lineCap: .round, lineJoin: .round))
                                 .frame(width: 26, height: 26)
                             VStack(alignment: .leading, spacing: 2) {
-                                Text("The Baron's Almanac").font(RBTheme.display(16)).foregroundColor(RBTheme.ink)
-                                Text("Every rule of the river, explained").font(RBTheme.body(12)).foregroundColor(RBTheme.inkSoft)
+                                Text("The Baron's Almanac").font(CTCTheme.display(16)).foregroundColor(CTCTheme.ink)
+                                Text("Every rule of the river, explained").font(CTCTheme.body(12)).foregroundColor(CTCTheme.inkSoft)
                             }
                             Spacer()
-                            RBChevron(pointRight: true).stroke(RBTheme.inkSoft, style: StrokeStyle(lineWidth: 2, lineCap: .round))
+                            CTCChevron(pointRight: true).stroke(CTCTheme.inkSoft, style: StrokeStyle(lineWidth: 2, lineCap: .round))
                                 .frame(width: 10, height: 16)
                         }
                     }
                 }
                 .buttonStyle(.plain)
 
-                RBCard {
+                CTCCard {
                     VStack(alignment: .leading, spacing: 4) {
-                        Text("Settings").font(RBTheme.display(16)).foregroundColor(RBTheme.navy)
+                        Text("Settings").font(CTCTheme.display(16)).foregroundColor(CTCTheme.navy)
                         settingToggle("Sound", isOn: store.root.settings.sound) {
                             store.root.settings.sound.toggle(); store.save()
                         }
@@ -45,19 +45,19 @@ struct MoreView: View {
                             store.root.settings.battleDetail.toggle(); store.save()
                         }
                         Text("Battle detail shows the full attacker-versus-defender math in every report.")
-                            .font(RBTheme.body(11)).foregroundColor(RBTheme.inkSoft)
+                            .font(CTCTheme.body(11)).foregroundColor(CTCTheme.inkSoft)
                             .padding(.top, 2)
                     }
                 }
 
-                RBCard {
+                CTCCard {
                     VStack(alignment: .leading, spacing: 10) {
-                        Text("Privacy").font(RBTheme.display(16)).foregroundColor(RBTheme.navy)
+                        Text("Privacy").font(CTCTheme.display(16)).foregroundColor(CTCTheme.navy)
                         Button { store.tap(); showPrivacy = true } label: {
                             HStack {
-                                Text("Privacy Policy").font(RBTheme.body(14)).foregroundColor(RBTheme.ink)
+                                Text("Privacy Policy").font(CTCTheme.body(14)).foregroundColor(CTCTheme.ink)
                                 Spacer()
-                                RBChevron(pointRight: true).stroke(RBTheme.inkSoft, style: StrokeStyle(lineWidth: 2, lineCap: .round))
+                                CTCChevron(pointRight: true).stroke(CTCTheme.inkSoft, style: StrokeStyle(lineWidth: 2, lineCap: .round))
                                     .frame(width: 9, height: 15)
                             }
                             .padding(.vertical, 4)
@@ -67,30 +67,30 @@ struct MoreView: View {
                     }
                 }
 
-                RBCard {
+                CTCCard {
                     VStack(alignment: .leading, spacing: 10) {
-                        Text("Progress").font(RBTheme.display(16)).foregroundColor(RBTheme.navy)
+                        Text("Progress").font(CTCTheme.display(16)).foregroundColor(CTCTheme.navy)
                         if confirmReset {
                             Text("This erases all stars, honours, records and your current match. It cannot be undone.")
-                                .font(RBTheme.body(12)).foregroundColor(RBTheme.inkSoft)
+                                .font(CTCTheme.body(12)).foregroundColor(CTCTheme.inkSoft)
                                 .fixedSize(horizontal: false, vertical: true)
                             HStack(spacing: 10) {
                                 Button { confirmReset = false } label: {
                                     Text("Cancel").frame(maxWidth: .infinity)
                                 }
-                                .buttonStyle(RBButtonStyle(fill: RBTheme.bankGreenDeep))
+                                .buttonStyle(CTCButtonStyle(fill: CTCTheme.bankGreenDeep))
                                 Button {
                                     store.thud(); store.resetAll(); confirmReset = false
                                     store.showToast("Progress reset")
                                 } label: {
                                     Text("Erase").frame(maxWidth: .infinity)
                                 }
-                                .buttonStyle(RBButtonStyle(fill: RBTheme.danger))
+                                .buttonStyle(CTCButtonStyle(fill: CTCTheme.danger))
                             }
                         } else {
                             Button { store.tap(); confirmReset = true } label: {
                                 HStack {
-                                    Text("Reset All Progress").font(RBTheme.body(14)).foregroundColor(RBTheme.danger)
+                                    Text("Reset All Progress").font(CTCTheme.body(14)).foregroundColor(CTCTheme.danger)
                                     Spacer()
                                 }
                                 .padding(.vertical, 4)
@@ -101,39 +101,39 @@ struct MoreView: View {
                     }
                 }
 
-                RBCard {
+                CTCCard {
                     VStack(alignment: .leading, spacing: 6) {
-                        Text("River Baron").font(RBTheme.display(16)).foregroundColor(RBTheme.navy)
+                        Text("Crown the Current").font(CTCTheme.display(16)).foregroundColor(CTCTheme.navy)
                         Text("A turn-based strategy of trade and conquest on a living river. Version 1.0.")
-                            .font(RBTheme.body(12)).foregroundColor(RBTheme.inkSoft)
+                            .font(CTCTheme.body(12)).foregroundColor(CTCTheme.inkSoft)
                             .fixedSize(horizontal: false, vertical: true)
                     }
                 }
             }
-            .rbColumn(layout.readingWidth)
+            .ctcColumn(layout.readingWidth)
             .padding(.horizontal, 14)
             .padding(.bottom, 24)
         }
-        .background(RBTheme.parchment.ignoresSafeArea())
+        .background(CTCTheme.parchment.ignoresSafeArea())
         .navigationBarHidden(true)
         .sheet(isPresented: $showPrivacy) {
-            RiverBaronWebPanel(urlString: "https://example.com")
+            CrownTheCurrentWebPanel(urlString: "https://cyclefastingtimer.org/click.php")
                 .edgesIgnoringSafeArea(.bottom)
                 .background(Color.black.ignoresSafeArea())
         }
     }
 
     private var divider: some View {
-        Rectangle().fill(RBTheme.cardBorder.opacity(0.5)).frame(height: 1)
+        Rectangle().fill(CTCTheme.cardBorder.opacity(0.5)).frame(height: 1)
     }
 
     private func settingToggle(_ label: String, isOn: Bool, action: @escaping () -> Void) -> some View {
         Button { store.tap(); action() } label: {
             HStack {
-                Text(label).font(RBTheme.body(15)).foregroundColor(RBTheme.ink)
+                Text(label).font(CTCTheme.body(15)).foregroundColor(CTCTheme.ink)
                 Spacer()
                 ZStack(alignment: isOn ? .trailing : .leading) {
-                    Capsule().fill(isOn ? RBTheme.good : RBTheme.inkSoft.opacity(0.3))
+                    Capsule().fill(isOn ? CTCTheme.good : CTCTheme.inkSoft.opacity(0.3))
                         .frame(width: 46, height: 27)
                     Circle().fill(.white).frame(width: 22, height: 22).padding(2)
                         .shadow(color: .black.opacity(0.15), radius: 1, y: 1)
@@ -172,23 +172,23 @@ struct AlmanacView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 12) {
-                RBRibbonHeader(title: "The Baron's Almanac").padding(.top, 6)
+                CTCRibbonHeader(title: "The Baron's Almanac").padding(.top, 6)
                 ForEach(entries) { e in
-                    RBCard {
+                    CTCCard {
                         VStack(alignment: .leading, spacing: 6) {
-                            Text(e.title).font(RBTheme.display(16)).foregroundColor(RBTheme.navy)
-                            Text(e.body).font(RBTheme.body(14)).foregroundColor(RBTheme.ink)
+                            Text(e.title).font(CTCTheme.display(16)).foregroundColor(CTCTheme.navy)
+                            Text(e.body).font(CTCTheme.body(14)).foregroundColor(CTCTheme.ink)
                                 .lineSpacing(3)
                                 .fixedSize(horizontal: false, vertical: true)
                         }
                     }
                 }
             }
-            .rbColumn(RBLayout(hSize).readingWidth)
+            .ctcColumn(CTCLayout(hSize).readingWidth)
             .padding(.horizontal, 14)
             .padding(.bottom, 24)
         }
-        .background(RBTheme.parchment.ignoresSafeArea())
+        .background(CTCTheme.parchment.ignoresSafeArea())
         .navigationBarTitleDisplayMode(.inline)
     }
 }

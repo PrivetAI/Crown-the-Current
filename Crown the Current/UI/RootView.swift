@@ -9,7 +9,7 @@ struct MatchLaunchItem: Identifiable {
 /// Root shell: custom HStack tab bar (Campaign / Skirmish / Chronicle / More)
 /// plus the fullscreen match router and the global achievement toast.
 struct RootView: View {
-    @ObservedObject var store = RBStore.shared
+    @ObservedObject var store = CTCStore.shared
     @Environment(\.horizontalSizeClass) private var hSize
     @State private var tab = 0
     @State private var session: MatchLaunchItem? = nil
@@ -43,18 +43,18 @@ struct RootView: View {
 
             if let toast = store.toast {
                 Text(toast)
-                    .font(RBTheme.body(14))
+                    .font(CTCTheme.body(14))
                     .foregroundColor(.white)
                     .padding(.horizontal, 18).padding(.vertical, 11)
                     .background(
-                        Capsule().fill(RBTheme.navy)
-                            .overlay(Capsule().strokeBorder(RBTheme.goldLine.opacity(0.8), lineWidth: 1.2))
+                        Capsule().fill(CTCTheme.navy)
+                            .overlay(Capsule().strokeBorder(CTCTheme.goldLine.opacity(0.8), lineWidth: 1.2))
                     )
                     .padding(.bottom, 84)
                     .transition(.move(edge: .bottom).combined(with: .opacity))
             }
         }
-        .background(RBTheme.parchment.ignoresSafeArea())
+        .background(CTCTheme.parchment.ignoresSafeArea())
         .fullScreenCover(item: $session) { item in
             MatchScreen(controller: item.controller, onExit: { session = nil })
         }
@@ -94,7 +94,7 @@ struct RootView: View {
         guard let mode = pendingStart?.mode else { return "" }
         if mode == "campaign",
            let saved = store.root.activeCampaignMatch,
-           let meta = RBScenarios.meta(saved.scenarioID) {
+           let meta = CTCScenarios.meta(saved.scenarioID) {
             return "\(meta.title) is still unfinished at turn \(saved.game.turn). Setting sail now abandons that match for good."
         }
         if let saved = store.root.activeSkirmishMatch {
@@ -105,19 +105,19 @@ struct RootView: View {
 
     private var tabBar: some View {
         HStack(spacing: 0) {
-            tabButton(0, "Campaign") { AnyView(RBPennantIcon().fill($0)) }
-            tabButton(1, "Skirmish") { AnyView(RBOarsIcon().fill($0)) }
-            tabButton(2, "Chronicle") { AnyView(RBStarIcon().fill($0)) }
+            tabButton(0, "Campaign") { AnyView(CTCPennantIcon().fill($0)) }
+            tabButton(1, "Skirmish") { AnyView(CTCOarsIcon().fill($0)) }
+            tabButton(2, "Chronicle") { AnyView(CTCStarIcon().fill($0)) }
             tabButton(3, "More") {
-                AnyView(RBBookIcon().stroke($0, style: StrokeStyle(lineWidth: 2, lineCap: .round, lineJoin: .round)))
+                AnyView(CTCBookIcon().stroke($0, style: StrokeStyle(lineWidth: 2, lineCap: .round, lineJoin: .round)))
             }
         }
-        .rbColumn(RBLayout(hSize).tabBarWidth)
+        .ctcColumn(CTCLayout(hSize).tabBarWidth)
         .padding(.top, 8)
         .padding(.bottom, 4)
         .background(
-            RBTheme.card
-                .overlay(Rectangle().frame(height: 1).foregroundColor(RBTheme.cardBorder), alignment: .top)
+            CTCTheme.card
+                .overlay(Rectangle().frame(height: 1).foregroundColor(CTCTheme.cardBorder), alignment: .top)
                 .edgesIgnoringSafeArea(.bottom)
         )
     }
@@ -125,7 +125,7 @@ struct RootView: View {
     private func tabButton(_ index: Int, _ label: String,
                            _ icon: @escaping (Color) -> AnyView) -> some View {
         let active = tab == index
-        let color = active ? RBTheme.navy : RBTheme.ink.opacity(0.4)
+        let color = active ? CTCTheme.navy : CTCTheme.ink.opacity(0.4)
         return Button {
             store.tap()
             withAnimation(.easeInOut(duration: 0.15)) { tab = index }
@@ -134,7 +134,7 @@ struct RootView: View {
                 icon(color)
                     .frame(width: 24, height: 24)
                 Text(label)
-                    .font(RBTheme.body(11))
+                    .font(CTCTheme.body(11))
                     .foregroundColor(color)
             }
             .frame(maxWidth: .infinity)

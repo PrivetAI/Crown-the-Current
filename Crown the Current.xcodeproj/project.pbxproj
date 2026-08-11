@@ -9,69 +9,69 @@
 /* Begin PBXBuildFile section */
 		10FD01000C082DBCFB82A012 /* MatchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89EAF91E4BE0CACFED1D0DAD /* MatchController.swift */; };
 		113BAA256D9A8B40BE154BCA /* MatchActionPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C753AD234AB2DA74E1E3701 /* MatchActionPanel.swift */; };
-		3C19371F473892F3D7B2E8E8 /* RBTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9BEA780302F0A62C52C9989 /* RBTheme.swift */; };
+		3C19371F473892F3D7B2E8E8 /* CTCTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9BEA780302F0A62C52C9989 /* CTCTheme.swift */; };
 		4591C1B3C154E3FBD90AE317 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 75362C1262870D05D373C9F6 /* Assets.xcassets */; };
-		51C3C7997136368E8480D901 /* RBScenarios.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B48E846E3AB0FB943FB8599 /* RBScenarios.swift */; };
-		6D99915DEB77CC26D7B27A19 /* RiverBaronApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C0DC0788F5E348D94401E1 /* RiverBaronApp.swift */; };
-		7870870ADF918555C394DF67 /* RiverBaronLoadingScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF5396F0A00B1ED2ECB37BE3 /* RiverBaronLoadingScreen.swift */; };
+		51C3C7997136368E8480D901 /* CTCScenarios.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B48E846E3AB0FB943FB8599 /* CTCScenarios.swift */; };
+		6D99915DEB77CC26D7B27A19 /* CrownTheCurrentApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C0DC0788F5E348D94401E1 /* CrownTheCurrentApp.swift */; };
+		7870870ADF918555C394DF67 /* CrownTheCurrentLoadingScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF5396F0A00B1ED2ECB37BE3 /* CrownTheCurrentLoadingScreen.swift */; };
 		79F3882E3F825C910638E74D /* CampaignView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCD89022CB533997AF5D469E /* CampaignView.swift */; };
 		7CD53E1A7D86345474C38C82 /* ChronicleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF469BF817632B7F6B943A4C /* ChronicleView.swift */; };
 		80177128E36475302866E238 /* MapCanvasView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5552923A6DF98442A97A70D3 /* MapCanvasView.swift */; };
-		81B4F481FE2A36530526DB73 /* RBModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157012680B10E76447D229CC /* RBModel.swift */; };
-		8F2A238F48E599EEEBEA6DAD /* RiverBaronWebPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97B5D0795A99715CB475ECBF /* RiverBaronWebPanel.swift */; };
+		81B4F481FE2A36530526DB73 /* CTCModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157012680B10E76447D229CC /* CTCModel.swift */; };
+		8F2A238F48E599EEEBEA6DAD /* CrownTheCurrentWebPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97B5D0795A99715CB475ECBF /* CrownTheCurrentWebPanel.swift */; };
 		9C1C04FF2361FFE8C761000B /* MatchOverlays.swift in Sources */ = {isa = PBXBuildFile; fileRef = 745E41C647761BD77C6C1B8E /* MatchOverlays.swift */; };
 		A1DB0F0CCD105C9394FC1CED /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A302ABEA9BC317668AD60D0A /* RootView.swift */; };
 		ADFEF90F8F943341238F7FF2 /* SkirmishView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FE4C31BB0521D107321DC68 /* SkirmishView.swift */; };
 		AE3E0572C72CAF1036A98018 /* MatchScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A193A28A6B620A57AB1C49E /* MatchScreen.swift */; };
 		C80DB3D1EBBA74453CA0DAA1 /* MoreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2095EA71EE2F9C412AA170A /* MoreView.swift */; };
-		D912F7B78169AA1E2D7230AD /* RBAI.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6224E9E04FF75DEB2271B16 /* RBAI.swift */; };
-		DF1C3B17CF481E875508766F /* RBRandom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8318F1379FE25216A950D982 /* RBRandom.swift */; };
-		E4D9A7443F01FC8C492917FD /* RBEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE6726B5880805F48E0168B2 /* RBEngine.swift */; };
-		E79D3DBBADB81496236A69CC /* RBMapGen.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCAC2CFA8D1BB7CB87369579 /* RBMapGen.swift */; };
-		ED97B7D4220CD8951AF6C656 /* RBStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF6DFB8C7CA218397C34B046 /* RBStore.swift */; };
+		D912F7B78169AA1E2D7230AD /* CTCAI.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6224E9E04FF75DEB2271B16 /* CTCAI.swift */; };
+		DF1C3B17CF481E875508766F /* CTCRandom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8318F1379FE25216A950D982 /* CTCRandom.swift */; };
+		E4D9A7443F01FC8C492917FD /* CTCEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE6726B5880805F48E0168B2 /* CTCEngine.swift */; };
+		E79D3DBBADB81496236A69CC /* CTCMapGen.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCAC2CFA8D1BB7CB87369579 /* CTCMapGen.swift */; };
+		ED97B7D4220CD8951AF6C656 /* CTCStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF6DFB8C7CA218397C34B046 /* CTCStore.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		0FE4C31BB0521D107321DC68 /* SkirmishView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkirmishView.swift; sourceTree = "<group>"; };
-		157012680B10E76447D229CC /* RBModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RBModel.swift; sourceTree = "<group>"; };
-		1F572DE71C880D02E25CA550 /* River Baron.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = "River Baron.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		157012680B10E76447D229CC /* CTCModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CTCModel.swift; sourceTree = "<group>"; };
+		1F572DE71C880D02E25CA550 /* Crown the Current.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = "Crown the Current.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3C753AD234AB2DA74E1E3701 /* MatchActionPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchActionPanel.swift; sourceTree = "<group>"; };
 		5552923A6DF98442A97A70D3 /* MapCanvasView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapCanvasView.swift; sourceTree = "<group>"; };
 		5A193A28A6B620A57AB1C49E /* MatchScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchScreen.swift; sourceTree = "<group>"; };
 		745E41C647761BD77C6C1B8E /* MatchOverlays.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchOverlays.swift; sourceTree = "<group>"; };
 		75362C1262870D05D373C9F6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		7B48E846E3AB0FB943FB8599 /* RBScenarios.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RBScenarios.swift; sourceTree = "<group>"; };
-		8318F1379FE25216A950D982 /* RBRandom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RBRandom.swift; sourceTree = "<group>"; };
+		7B48E846E3AB0FB943FB8599 /* CTCScenarios.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CTCScenarios.swift; sourceTree = "<group>"; };
+		8318F1379FE25216A950D982 /* CTCRandom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CTCRandom.swift; sourceTree = "<group>"; };
 		89EAF91E4BE0CACFED1D0DAD /* MatchController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchController.swift; sourceTree = "<group>"; };
 		96CABA31EF0614AFDCE041B1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
-		97B5D0795A99715CB475ECBF /* RiverBaronWebPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RiverBaronWebPanel.swift; sourceTree = "<group>"; };
+		97B5D0795A99715CB475ECBF /* CrownTheCurrentWebPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CrownTheCurrentWebPanel.swift; sourceTree = "<group>"; };
 		A302ABEA9BC317668AD60D0A /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
-		A5C0DC0788F5E348D94401E1 /* RiverBaronApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RiverBaronApp.swift; sourceTree = "<group>"; };
+		A5C0DC0788F5E348D94401E1 /* CrownTheCurrentApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CrownTheCurrentApp.swift; sourceTree = "<group>"; };
 		B2095EA71EE2F9C412AA170A /* MoreView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreView.swift; sourceTree = "<group>"; };
-		B6224E9E04FF75DEB2271B16 /* RBAI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RBAI.swift; sourceTree = "<group>"; };
+		B6224E9E04FF75DEB2271B16 /* CTCAI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CTCAI.swift; sourceTree = "<group>"; };
 		BCD89022CB533997AF5D469E /* CampaignView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CampaignView.swift; sourceTree = "<group>"; };
-		C9BEA780302F0A62C52C9989 /* RBTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RBTheme.swift; sourceTree = "<group>"; };
-		CF5396F0A00B1ED2ECB37BE3 /* RiverBaronLoadingScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RiverBaronLoadingScreen.swift; sourceTree = "<group>"; };
-		DE6726B5880805F48E0168B2 /* RBEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RBEngine.swift; sourceTree = "<group>"; };
-		DF6DFB8C7CA218397C34B046 /* RBStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RBStore.swift; sourceTree = "<group>"; };
+		C9BEA780302F0A62C52C9989 /* CTCTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CTCTheme.swift; sourceTree = "<group>"; };
+		CF5396F0A00B1ED2ECB37BE3 /* CrownTheCurrentLoadingScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CrownTheCurrentLoadingScreen.swift; sourceTree = "<group>"; };
+		DE6726B5880805F48E0168B2 /* CTCEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CTCEngine.swift; sourceTree = "<group>"; };
+		DF6DFB8C7CA218397C34B046 /* CTCStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CTCStore.swift; sourceTree = "<group>"; };
 		EF469BF817632B7F6B943A4C /* ChronicleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChronicleView.swift; sourceTree = "<group>"; };
-		FCAC2CFA8D1BB7CB87369579 /* RBMapGen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RBMapGen.swift; sourceTree = "<group>"; };
+		FCAC2CFA8D1BB7CB87369579 /* CTCMapGen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CTCMapGen.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
-		0D74EE36B931727BD37B8A18 /* River Baron */ = {
+		0D74EE36B931727BD37B8A18 /* Crown the Current */ = {
 			isa = PBXGroup;
 			children = (
 				75362C1262870D05D373C9F6 /* Assets.xcassets */,
 				96CABA31EF0614AFDCE041B1 /* Info.plist */,
-				A5C0DC0788F5E348D94401E1 /* RiverBaronApp.swift */,
-				CF5396F0A00B1ED2ECB37BE3 /* RiverBaronLoadingScreen.swift */,
-				97B5D0795A99715CB475ECBF /* RiverBaronWebPanel.swift */,
+				A5C0DC0788F5E348D94401E1 /* CrownTheCurrentApp.swift */,
+				CF5396F0A00B1ED2ECB37BE3 /* CrownTheCurrentLoadingScreen.swift */,
+				97B5D0795A99715CB475ECBF /* CrownTheCurrentWebPanel.swift */,
 				A1B7D9CFE433E897C4CF7A39 /* Engine */,
 				C02B527AEC6D3322D289F0AF /* Store */,
 				3E80D8CF52F900ADA44D1ECA /* UI */,
 			);
-			path = "River Baron";
+			path = "Crown the Current";
 			sourceTree = "<group>";
 		};
 		3E80D8CF52F900ADA44D1ECA /* UI */ = {
@@ -85,7 +85,7 @@
 				745E41C647761BD77C6C1B8E /* MatchOverlays.swift */,
 				5A193A28A6B620A57AB1C49E /* MatchScreen.swift */,
 				B2095EA71EE2F9C412AA170A /* MoreView.swift */,
-				C9BEA780302F0A62C52C9989 /* RBTheme.swift */,
+				C9BEA780302F0A62C52C9989 /* CTCTheme.swift */,
 				A302ABEA9BC317668AD60D0A /* RootView.swift */,
 				0FE4C31BB0521D107321DC68 /* SkirmishView.swift */,
 			);
@@ -95,7 +95,7 @@
 		62DBB39BB890CD00D8072571 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				1F572DE71C880D02E25CA550 /* River Baron.app */,
+				1F572DE71C880D02E25CA550 /* Crown the Current.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -103,12 +103,12 @@
 		A1B7D9CFE433E897C4CF7A39 /* Engine */ = {
 			isa = PBXGroup;
 			children = (
-				B6224E9E04FF75DEB2271B16 /* RBAI.swift */,
-				DE6726B5880805F48E0168B2 /* RBEngine.swift */,
-				FCAC2CFA8D1BB7CB87369579 /* RBMapGen.swift */,
-				157012680B10E76447D229CC /* RBModel.swift */,
-				8318F1379FE25216A950D982 /* RBRandom.swift */,
-				7B48E846E3AB0FB943FB8599 /* RBScenarios.swift */,
+				B6224E9E04FF75DEB2271B16 /* CTCAI.swift */,
+				DE6726B5880805F48E0168B2 /* CTCEngine.swift */,
+				FCAC2CFA8D1BB7CB87369579 /* CTCMapGen.swift */,
+				157012680B10E76447D229CC /* CTCModel.swift */,
+				8318F1379FE25216A950D982 /* CTCRandom.swift */,
+				7B48E846E3AB0FB943FB8599 /* CTCScenarios.swift */,
 			);
 			path = Engine;
 			sourceTree = "<group>";
@@ -116,7 +116,7 @@
 		C02B527AEC6D3322D289F0AF /* Store */ = {
 			isa = PBXGroup;
 			children = (
-				DF6DFB8C7CA218397C34B046 /* RBStore.swift */,
+				DF6DFB8C7CA218397C34B046 /* CTCStore.swift */,
 			);
 			path = Store;
 			sourceTree = "<group>";
@@ -124,7 +124,7 @@
 		E45A639B53774615EB432A24 = {
 			isa = PBXGroup;
 			children = (
-				0D74EE36B931727BD37B8A18 /* River Baron */,
+				0D74EE36B931727BD37B8A18 /* Crown the Current */,
 				62DBB39BB890CD00D8072571 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -132,9 +132,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		5485D01305E28B42074F23C7 /* River Baron */ = {
+		5485D01305E28B42074F23C7 /* Crown the Current */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = FF248BCCCF5B9B13E39A41EE /* Build configuration list for PBXNativeTarget "River Baron" */;
+			buildConfigurationList = FF248BCCCF5B9B13E39A41EE /* Build configuration list for PBXNativeTarget "Crown the Current" */;
 			buildPhases = (
 				D8E41A407CE88225B815DD51 /* Sources */,
 				E952A48F44B557E060372E24 /* Resources */,
@@ -143,11 +143,11 @@
 			);
 			dependencies = (
 			);
-			name = "River Baron";
+			name = "Crown the Current";
 			packageProductDependencies = (
 			);
-			productName = "River Baron";
-			productReference = 1F572DE71C880D02E25CA550 /* River Baron.app */;
+			productName = "Crown the Current";
+			productReference = 1F572DE71C880D02E25CA550 /* Crown the Current.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -165,7 +165,7 @@
 					};
 				};
 			};
-			buildConfigurationList = C3A31D27D664C80681E78CF6 /* Build configuration list for PBXProject "River Baron" */;
+			buildConfigurationList = C3A31D27D664C80681E78CF6 /* Build configuration list for PBXProject "Crown the Current" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -179,7 +179,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				5485D01305E28B42074F23C7 /* River Baron */,
+				5485D01305E28B42074F23C7 /* Crown the Current */,
 			);
 		};
 /* End PBXProject section */
@@ -208,17 +208,17 @@
 				9C1C04FF2361FFE8C761000B /* MatchOverlays.swift in Sources */,
 				AE3E0572C72CAF1036A98018 /* MatchScreen.swift in Sources */,
 				C80DB3D1EBBA74453CA0DAA1 /* MoreView.swift in Sources */,
-				D912F7B78169AA1E2D7230AD /* RBAI.swift in Sources */,
-				E4D9A7443F01FC8C492917FD /* RBEngine.swift in Sources */,
-				E79D3DBBADB81496236A69CC /* RBMapGen.swift in Sources */,
-				81B4F481FE2A36530526DB73 /* RBModel.swift in Sources */,
-				DF1C3B17CF481E875508766F /* RBRandom.swift in Sources */,
-				51C3C7997136368E8480D901 /* RBScenarios.swift in Sources */,
-				ED97B7D4220CD8951AF6C656 /* RBStore.swift in Sources */,
-				3C19371F473892F3D7B2E8E8 /* RBTheme.swift in Sources */,
-				6D99915DEB77CC26D7B27A19 /* RiverBaronApp.swift in Sources */,
-				7870870ADF918555C394DF67 /* RiverBaronLoadingScreen.swift in Sources */,
-				8F2A238F48E599EEEBEA6DAD /* RiverBaronWebPanel.swift in Sources */,
+				D912F7B78169AA1E2D7230AD /* CTCAI.swift in Sources */,
+				E4D9A7443F01FC8C492917FD /* CTCEngine.swift in Sources */,
+				E79D3DBBADB81496236A69CC /* CTCMapGen.swift in Sources */,
+				81B4F481FE2A36530526DB73 /* CTCModel.swift in Sources */,
+				DF1C3B17CF481E875508766F /* CTCRandom.swift in Sources */,
+				51C3C7997136368E8480D901 /* CTCScenarios.swift in Sources */,
+				ED97B7D4220CD8951AF6C656 /* CTCStore.swift in Sources */,
+				3C19371F473892F3D7B2E8E8 /* CTCTheme.swift in Sources */,
+				6D99915DEB77CC26D7B27A19 /* CrownTheCurrentApp.swift in Sources */,
+				7870870ADF918555C394DF67 /* CrownTheCurrentLoadingScreen.swift in Sources */,
+				8F2A238F48E599EEEBEA6DAD /* CrownTheCurrentWebPanel.swift in Sources */,
 				A1DB0F0CCD105C9394FC1CED /* RootView.swift in Sources */,
 				ADFEF90F8F943341238F7FF2 /* SkirmishView.swift in Sources */,
 			);
@@ -302,14 +302,14 @@
 				CODE_SIGNING_ALLOWED = NO;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				INFOPLIST_FILE = "River Baron/Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = "River Baron";
+				INFOPLIST_FILE = "Crown the Current/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Crown the Current";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.riverbaron.app;
-				PRODUCT_NAME = "River Baron";
+				PRODUCT_BUNDLE_IDENTIFIER = com.crownthecurrent.app;
+				PRODUCT_NAME = "Crown the Current";
 				SDKROOT = iphoneos;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
@@ -326,14 +326,14 @@
 				CODE_SIGNING_ALLOWED = NO;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				INFOPLIST_FILE = "River Baron/Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = "River Baron";
+				INFOPLIST_FILE = "Crown the Current/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Crown the Current";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.riverbaron.app;
-				PRODUCT_NAME = "River Baron";
+				PRODUCT_BUNDLE_IDENTIFIER = com.crownthecurrent.app;
+				PRODUCT_NAME = "Crown the Current";
 				SDKROOT = iphoneos;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
@@ -421,7 +421,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		C3A31D27D664C80681E78CF6 /* Build configuration list for PBXProject "River Baron" */ = {
+		C3A31D27D664C80681E78CF6 /* Build configuration list for PBXProject "Crown the Current" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				F84015DFE9F2F710C765B8A4 /* Debug */,
@@ -430,7 +430,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
 		};
-		FF248BCCCF5B9B13E39A41EE /* Build configuration list for PBXNativeTarget "River Baron" */ = {
+		FF248BCCCF5B9B13E39A41EE /* Build configuration list for PBXNativeTarget "Crown the Current" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				D533ACE5AA352E2FCDB0D803 /* Debug */,

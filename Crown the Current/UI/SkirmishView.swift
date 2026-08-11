@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct SkirmishView: View {
-    @ObservedObject var store = RBStore.shared
+    @ObservedObject var store = CTCStore.shared
     @Environment(\.horizontalSizeClass) private var hSize
     let startMatch: (MatchState, Bool) -> Void
 
@@ -15,15 +15,15 @@ struct SkirmishView: View {
     private let personaOptions = ["merchant", "corsair", "engineer"]
     private let personaLabels = ["Merchant", "Corsair", "Engineer"]
 
-    private var layout: RBLayout { RBLayout(hSize) }
+    private var layout: CTCLayout { CTCLayout(hSize) }
 
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
-                RBRibbonHeader(title: "Free Skirmish", subtitle: "A fresh river, generated to your taste")
+                CTCRibbonHeader(title: "Free Skirmish", subtitle: "A fresh river, generated to your taste")
                     .padding(.top, 6)
 
-                RBArtBanner(imageName: "rb_skirmish", height: layout.regular ? 180 : 118)
+                CTCArtBanner(imageName: "ctc_skirmish", height: layout.regular ? 180 : 118)
 
                 if let match = store.root.activeSkirmishMatch {
                     resumeCard(turn: match.game.turn,
@@ -42,7 +42,7 @@ struct SkirmishView: View {
                     VStack(spacing: 8) {
                         ForEach(0..<opponents, id: \.self) { i in
                             HStack {
-                                Text("Baron \(i + 1)").font(RBTheme.body(13)).foregroundColor(RBTheme.inkSoft)
+                                Text("Baron \(i + 1)").font(CTCTheme.body(13)).foregroundColor(CTCTheme.inkSoft)
                                     .frame(width: 66, alignment: .leading)
                                 segmented(personaLabels, selection: personaOptions.firstIndex(of: personaSlots[i]) ?? 0) {
                                     personaSlots[i] = personaOptions[$0]
@@ -62,7 +62,7 @@ struct SkirmishView: View {
                 optionCard(title: "Fog of War") {
                     HStack {
                         Text(fog ? "Hidden waters — scout with towers" : "The whole river in view")
-                            .font(RBTheme.body(13)).foregroundColor(RBTheme.inkSoft)
+                            .font(CTCTheme.body(13)).foregroundColor(CTCTheme.inkSoft)
                         Spacer()
                         toggle($fog)
                     }
@@ -72,17 +72,17 @@ struct SkirmishView: View {
                     HStack(spacing: 10) {
                         TextField("seed", text: $seedText)
                             .keyboardType(.numberPad)
-                            .font(RBTheme.num(15))
+                            .font(CTCTheme.num(15))
                             .padding(.horizontal, 12).padding(.vertical, 9)
-                            .background(RoundedRectangle(cornerRadius: 9).fill(RBTheme.parchment)
-                                .overlay(RoundedRectangle(cornerRadius: 9).strokeBorder(RBTheme.cardBorder, lineWidth: 1)))
+                            .background(RoundedRectangle(cornerRadius: 9).fill(CTCTheme.parchment)
+                                .overlay(RoundedRectangle(cornerRadius: 9).strokeBorder(CTCTheme.cardBorder, lineWidth: 1)))
                         Button {
                             store.tap()
                             seedText = "\(UInt64.random(in: 1...9_999_999))"
                         } label: {
-                            Text("Shuffle").font(RBTheme.display(14)).foregroundColor(.white)
+                            Text("Shuffle").font(CTCTheme.display(14)).foregroundColor(.white)
                                 .padding(.horizontal, 14).padding(.vertical, 10)
-                                .background(RoundedRectangle(cornerRadius: 9).fill(RBTheme.bankGreenDeep))
+                                .background(RoundedRectangle(cornerRadius: 9).fill(CTCTheme.bankGreenDeep))
                         }
                         .buttonStyle(.plain)
                     }
@@ -91,27 +91,27 @@ struct SkirmishView: View {
                 Button(action: generate) {
                     Text("Generate & Sail").frame(maxWidth: .infinity)
                 }
-                .buttonStyle(RBButtonStyle())
+                .buttonStyle(CTCButtonStyle())
                 .padding(.top, 4)
             }
-            .rbColumn(layout.readingWidth)
+            .ctcColumn(layout.readingWidth)
             .padding(.horizontal, 14)
             .padding(.bottom, 26)
         }
-        .background(RBTheme.parchment.ignoresSafeArea())
+        .background(CTCTheme.parchment.ignoresSafeArea())
         .navigationBarHidden(true)
     }
 
     private func resumeCard(turn: Int, nodes: Int, action: @escaping () -> Void) -> some View {
         Button(action: { store.tap(); action() }) {
-            RBCard {
+            CTCCard {
                 HStack {
                     VStack(alignment: .leading, spacing: 3) {
-                        Text("Resume Skirmish").font(RBTheme.body(12)).foregroundColor(RBTheme.good)
-                        Text("Turn \(turn) · \(nodes) landings").font(RBTheme.display(16)).foregroundColor(RBTheme.ink)
+                        Text("Resume Skirmish").font(CTCTheme.body(12)).foregroundColor(CTCTheme.good)
+                        Text("Turn \(turn) · \(nodes) landings").font(CTCTheme.display(16)).foregroundColor(CTCTheme.ink)
                     }
                     Spacer()
-                    RBChevron(pointRight: true).stroke(RBTheme.navy, style: StrokeStyle(lineWidth: 2.4, lineCap: .round))
+                    CTCChevron(pointRight: true).stroke(CTCTheme.navy, style: StrokeStyle(lineWidth: 2.4, lineCap: .round))
                         .frame(width: 13, height: 20)
                 }
             }
@@ -120,9 +120,9 @@ struct SkirmishView: View {
     }
 
     private func optionCard<Content: View>(title: String, @ViewBuilder content: () -> Content) -> some View {
-        RBCard {
+        CTCCard {
             VStack(alignment: .leading, spacing: 10) {
-                Text(title).font(RBTheme.display(15)).foregroundColor(RBTheme.navy)
+                Text(title).font(CTCTheme.display(15)).foregroundColor(CTCTheme.navy)
                 content()
             }
         }
@@ -136,12 +136,12 @@ struct SkirmishView: View {
                     store.tap()
                     onSelect(i)
                 } label: {
-                    Text(label).font(RBTheme.body(13))
-                        .foregroundColor(active ? .white : RBTheme.ink)
+                    Text(label).font(CTCTheme.body(13))
+                        .foregroundColor(active ? .white : CTCTheme.ink)
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 8)
-                        .background(RoundedRectangle(cornerRadius: 8).fill(active ? RBTheme.navy : RBTheme.parchment)
-                            .overlay(RoundedRectangle(cornerRadius: 8).strokeBorder(RBTheme.cardBorder, lineWidth: active ? 0 : 1)))
+                        .background(RoundedRectangle(cornerRadius: 8).fill(active ? CTCTheme.navy : CTCTheme.parchment)
+                            .overlay(RoundedRectangle(cornerRadius: 8).strokeBorder(CTCTheme.cardBorder, lineWidth: active ? 0 : 1)))
                 }
                 .buttonStyle(.plain)
             }
@@ -154,7 +154,7 @@ struct SkirmishView: View {
             binding.wrappedValue.toggle()
         } label: {
             ZStack(alignment: binding.wrappedValue ? .trailing : .leading) {
-                Capsule().fill(binding.wrappedValue ? RBTheme.good : RBTheme.inkSoft.opacity(0.3))
+                Capsule().fill(binding.wrappedValue ? CTCTheme.good : CTCTheme.inkSoft.opacity(0.3))
                     .frame(width: 46, height: 27)
                 Circle().fill(.white).frame(width: 22, height: 22).padding(2)
                     .shadow(color: .black.opacity(0.15), radius: 1, y: 1)
@@ -172,7 +172,7 @@ struct SkirmishView: View {
         config.difficulty = difficulty
         config.fog = fog
         config.seed = UInt64(seedText) ?? UInt64.random(in: 1...9_999_999)
-        let game = RBMapGen.generate(config: config, playerColor: store.root.selectedBanner)
+        let game = CTCMapGen.generate(config: config, playerColor: store.root.selectedBanner)
         var ms = MatchState()
         ms.mode = "skirmish"
         ms.skirmish = config

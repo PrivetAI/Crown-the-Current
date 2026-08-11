@@ -5,10 +5,10 @@ import SwiftUI
 final class MatchController: ObservableObject {
     @Published var state: GameState
     @Published var selectedNodeID: Int? = nil
-    @Published var reachable: [Int: RBRoute] = [:]
-    @Published var reportQueue: [RBBattleReport] = []
+    @Published var reachable: [Int: CTCRoute] = [:]
+    @Published var reportQueue: [CTCBattleReport] = []
     @Published var turnNotices: [String] = []
-    @Published var battleReview: [RBBattleReport] = []   // human's own strike, shown at once
+    @Published var battleReview: [CTCBattleReport] = []   // human's own strike, shown at once
     @Published var showTurnSummary = false
     @Published var aiThinking = false
     @Published var showResult = false
@@ -17,10 +17,10 @@ final class MatchController: ObservableObject {
     let mode: String
     let scenarioID: Int
     let skirmish: SkirmishConfig
-    private let store: RBStore
+    private let store: CTCStore
     private var finished = false
 
-    init(match: MatchState, store: RBStore) {
+    init(match: MatchState, store: CTCStore) {
         self.state = match.game
         self.mode = match.mode
         self.scenarioID = match.scenarioID
@@ -47,15 +47,15 @@ final class MatchController: ObservableObject {
             && state.currentPlayer == 0 && !state.players[0].eliminated
     }
 
-    var humanPlayer: RBPlayer? {
+    var humanPlayer: CTCPlayer? {
         state.players.first
     }
 
     var humanIncome: Int {
-        RBEngine.income(of: 0, in: state)
+        CTCEngine.income(of: 0, in: state)
     }
 
-    func ownFleet(at nodeID: Int) -> RBFleet? {
+    func ownFleet(at nodeID: Int) -> CTCFleet? {
         state.fleetsAt(nodeID).first { $0.owner == 0 }
     }
 
@@ -90,12 +90,12 @@ final class MatchController: ObservableObject {
         selectedNodeID = id
         reachable = [:]
         if humanTurn, let fleet = ownFleet(at: id), fleet.mp > 0 {
-            reachable = RBEngine.routes(for: fleet.id, in: state)
+            reachable = CTCEngine.routes(for: fleet.id, in: state)
         }
     }
 
     private func performMove(fleetID: Int, to dest: Int) {
-        _ = RBEngine.moveFleet(fleetID, to: dest, in: &state)
+        _ = CTCEngine.moveFleet(fleetID, to: dest, in: &state)
         let survivor = state.fleet(fleetID)
         let fresh = drainEvents()
         if !fresh.isEmpty {
@@ -117,9 +117,9 @@ final class MatchController: ObservableObject {
 
     // MARK: - Building
 
-    func build(_ kind: RBEngine.BuildKind, at nodeID: Int, damEdge: Int = -1) {
+    func build(_ kind: CTCEngine.BuildKind, at nodeID: Int, damEdge: Int = -1) {
         guard humanTurn else { return }
-        if RBEngine.build(kind, at: nodeID, damEdge: damEdge, in: &state) {
+        if CTCEngine.build(kind, at: nodeID, damEdge: damEdge, in: &state) {
             store.thud()
             drainEvents()
             refreshSelection()
@@ -129,7 +129,7 @@ final class MatchController: ObservableObject {
 
     func recruit(at nodeID: Int) {
         guard humanTurn else { return }
-        if RBEngine.recruit(at: nodeID, in: &state) {
+        if CTCEngine.recruit(at: nodeID, in: &state) {
             store.thud()
             drainEvents()
             refreshSelection()
@@ -139,7 +139,7 @@ final class MatchController: ObservableObject {
 
     func breachDam(fleetID: Int, edgeID: Int) {
         guard humanTurn else { return }
-        if RBEngine.breachDam(fleetID, edgeID: edgeID, in: &state) {
+        if CTCEngine.breachDam(fleetID, edgeID: edgeID, in: &state) {
             store.thud()
             drainEvents()
             refreshSelection()
@@ -159,7 +159,7 @@ final class MatchController: ObservableObject {
         deselect()
         state.notices.removeAll()
         state.pendingReports.removeAll()
-        RBEngine.endTurn(&state)
+        CTCEngine.endTurn(&state)
         autosave()
         if state.winner != -9 {
             drainEvents()
@@ -175,7 +175,7 @@ final class MatchController: ObservableObject {
         aiThinking = true
         DispatchQueue.main.asyncAfter(deadline: .now() + delay) { [weak self] in
             guard let self = self else { return }
-            RBAI.runAITurns(&self.state)
+            CTCAI.runAITurns(&self.state)
             self.aiThinking = false
             self.drainEvents()
             let hasNews = !self.reportQueue.isEmpty || !self.turnNotices.isEmpty
@@ -190,7 +190,7 @@ final class MatchController: ObservableObject {
     /// Moves engine events into UI queues; spots pirate kills for achievements.
     /// Returns the battle reports produced by this drain (for immediate popups).
     @discardableResult
-    private func drainEvents() -> [RBBattleReport] {
+    private func drainEvents() -> [CTCBattleReport] {
         let fresh = state.pendingReports
         if !fresh.isEmpty {
             for r in fresh {

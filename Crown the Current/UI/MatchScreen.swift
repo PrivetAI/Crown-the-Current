@@ -4,11 +4,11 @@ import SwiftUI
 /// node action panel, the End Turn banner, and all match overlays.
 struct MatchScreen: View {
     @ObservedObject var controller: MatchController
-    @ObservedObject var store = RBStore.shared
+    @ObservedObject var store = CTCStore.shared
     @Environment(\.horizontalSizeClass) private var hSize
     let onExit: () -> Void
 
-    @State private var camera = RBCamera()
+    @State private var camera = CTCCamera()
     @State private var pinch: CGFloat = 1
     @State private var dragT: CGSize = .zero
     @State private var pinchEndedAt = Date.distantPast
@@ -18,7 +18,7 @@ struct MatchScreen: View {
 
     private var state: GameState { controller.state }
 
-    private var layout: RBLayout { RBLayout(hSize) }
+    private var layout: CTCLayout { CTCLayout(hSize) }
 
     /// Width of the docked action rail on a regular-width landscape screen.
     private let railWidth: CGFloat = 360
@@ -26,7 +26,7 @@ struct MatchScreen: View {
     var body: some View {
         GeometryReader { geo in
             ZStack {
-                RBTheme.parchment.ignoresSafeArea()
+                CTCTheme.parchment.ignoresSafeArea()
 
                 mapLayer(geo.size)
 
@@ -74,15 +74,15 @@ struct MatchScreen: View {
     /// full screen. On iPad the fit is taken against the *usable* rectangle
     /// instead, so the whole river frames sensibly beside the HUD and the panel
     /// rather than running underneath them.
-    private func mapInset(_ size: CGSize) -> RBMapInset {
-        guard layout.regular else { return RBMapInset() }
+    private func mapInset(_ size: CGSize) -> CTCMapInset {
+        guard layout.regular else { return CTCMapInset() }
         if useSideRail(size) {
-            return RBMapInset(top: 104, bottom: 32, trailing: railWidth + 24)
+            return CTCMapInset(top: 104, bottom: 32, trailing: railWidth + 24)
         }
-        return RBMapInset(top: 104, bottom: 288)
+        return CTCMapInset(top: 104, bottom: 288)
     }
 
-    private func effectiveCamera(_ size: CGSize) -> RBCamera {
+    private func effectiveCamera(_ size: CGSize) -> CTCCamera {
         var c = camera
         c.scale = min(3.5, max(0.55, camera.scale * pinch))
         c.offset = CGSize(width: camera.offset.width + dragT.width,
@@ -147,7 +147,7 @@ struct MatchScreen: View {
     private func recenter() {
         store.tap()
         withAnimation(.easeInOut(duration: 0.25)) {
-            camera = RBCamera()
+            camera = CTCCamera()
         }
     }
 
@@ -157,19 +157,19 @@ struct MatchScreen: View {
         VStack(spacing: 6) {
             HStack(spacing: 10) {
                 Button { store.tap(); showMenu = true } label: {
-                    RBPennantIcon().fill(RBTheme.navy)
+                    CTCPennantIcon().fill(CTCTheme.navy)
                         .frame(width: 20, height: 22)
                         .padding(9)
-                        .background(Circle().fill(RBTheme.card).overlay(Circle().strokeBorder(RBTheme.cardBorder, lineWidth: 1)))
+                        .background(Circle().fill(CTCTheme.card).overlay(Circle().strokeBorder(CTCTheme.cardBorder, lineWidth: 1)))
                 }
                 .buttonStyle(.plain)
 
                 VStack(alignment: .leading, spacing: 2) {
                     Text("Turn \(state.turn) / \(state.turnCap)")
-                        .font(RBTheme.num(12)).foregroundColor(RBTheme.ink)
+                        .font(CTCTheme.num(12)).foregroundColor(CTCTheme.ink)
                     HStack(spacing: 5) {
                         Circle().fill(statusColor).frame(width: 9, height: 9)
-                        Text(statusText).font(RBTheme.body(13)).foregroundColor(RBTheme.inkSoft)
+                        Text(statusText).font(CTCTheme.body(13)).foregroundColor(CTCTheme.inkSoft)
                             .lineLimit(1).minimumScaleFactor(0.7)
                     }
                 }
@@ -178,36 +178,36 @@ struct MatchScreen: View {
 
                 VStack(alignment: .trailing, spacing: 2) {
                     HStack(spacing: 4) {
-                        RBCoinIcon(size: 15)
-                        Text("\(humanFlorins)").font(RBTheme.num(16)).foregroundColor(RBTheme.ink)
+                        CTCCoinIcon(size: 15)
+                        Text("\(humanFlorins)").font(CTCTheme.num(16)).foregroundColor(CTCTheme.ink)
                     }
                     Text("+\(controller.humanIncome)/turn")
-                        .font(RBTheme.numLight(11)).foregroundColor(RBTheme.good)
+                        .font(CTCTheme.numLight(11)).foregroundColor(CTCTheme.good)
                 }
 
                 Button { recenter() } label: {
-                    RBCompassGlyph().stroke(RBTheme.navy, style: StrokeStyle(lineWidth: 2, lineCap: .round))
+                    CTCCompassGlyph().stroke(CTCTheme.navy, style: StrokeStyle(lineWidth: 2, lineCap: .round))
                         .frame(width: 20, height: 20)
                         .padding(9)
-                        .background(Circle().fill(RBTheme.card).overlay(Circle().strokeBorder(RBTheme.cardBorder, lineWidth: 1)))
+                        .background(Circle().fill(CTCTheme.card).overlay(Circle().strokeBorder(CTCTheme.cardBorder, lineWidth: 1)))
                 }
                 .buttonStyle(.plain)
             }
-            if RBEngine.floodActive(state) {
+            if CTCEngine.floodActive(state) {
                 HStack(spacing: 5) {
                     Text("Flood season — upstream travel costs 1 move this turn")
-                        .font(RBTheme.body(11)).foregroundColor(RBTheme.riverDeep)
+                        .font(CTCTheme.body(11)).foregroundColor(CTCTheme.riverDeep)
                 }
                 .padding(.horizontal, 10).padding(.vertical, 4)
-                .background(Capsule().fill(RBTheme.riverLight.opacity(0.22)))
+                .background(Capsule().fill(CTCTheme.riverLight.opacity(0.22)))
             }
         }
-        .rbColumn(layout.gridWidth)
+        .ctcColumn(layout.gridWidth)
         .padding(.horizontal, 12)
         .padding(.vertical, 8)
         .background(
-            RBTheme.card.opacity(0.94)
-                .overlay(Rectangle().frame(height: 1).foregroundColor(RBTheme.cardBorder), alignment: .bottom)
+            CTCTheme.card.opacity(0.94)
+                .overlay(Rectangle().frame(height: 1).foregroundColor(CTCTheme.cardBorder), alignment: .bottom)
                 .edgesIgnoringSafeArea(.top)
         )
     }
@@ -227,11 +227,11 @@ struct MatchScreen: View {
     }
 
     private var statusColor: Color {
-        if controller.humanTurn { return RBTheme.good }
+        if controller.humanTurn { return CTCTheme.good }
         if state.players.indices.contains(state.currentPlayer) {
-            return RBTheme.ownerColor(state.currentPlayer, players: state.players)
+            return CTCTheme.ownerColor(state.currentPlayer, players: state.players)
         }
-        return RBTheme.inkSoft
+        return CTCTheme.inkSoft
     }
 
     // MARK: - Bottom (action panel + end turn / ai banner)
@@ -255,14 +255,14 @@ struct MatchScreen: View {
                                  maxPanelHeight: panelCap(screenHeight),
                                  onClose: { controller.deselect() })
                     .padding(.horizontal, 10)
-                    .rbColumn(layout.panelWidth)
+                    .ctcColumn(layout.panelWidth)
                     .transition(.move(edge: .bottom).combined(with: .opacity))
             }
 
             if controller.aiThinking {
-                banner(text: "The barons are moving...", fill: RBTheme.navy.opacity(0.85), enabled: false) {}
+                banner(text: "The barons are moving...", fill: CTCTheme.navy.opacity(0.85), enabled: false) {}
             } else if controller.humanTurn {
-                banner(text: "End Turn", fill: RBTheme.navy, enabled: true) {
+                banner(text: "End Turn", fill: CTCTheme.navy, enabled: true) {
                     withAnimation { controller.endTurn() }
                 }
             }
@@ -274,19 +274,19 @@ struct MatchScreen: View {
         Button(action: { if enabled { action() } }) {
             HStack {
                 Spacer()
-                Text(text).font(RBTheme.display(18)).foregroundColor(.white)
+                Text(text).font(CTCTheme.display(18)).foregroundColor(.white)
                 Spacer()
             }
             .padding(.vertical, 14)
             .background(
                 RoundedRectangle(cornerRadius: 14).fill(fill)
-                    .overlay(RoundedRectangle(cornerRadius: 14).strokeBorder(RBTheme.goldLine.opacity(0.7), lineWidth: 1.4))
+                    .overlay(RoundedRectangle(cornerRadius: 14).strokeBorder(CTCTheme.goldLine.opacity(0.7), lineWidth: 1.4))
             )
         }
         .buttonStyle(.plain)
         .disabled(!enabled)
         .padding(.horizontal, 14)
-        .rbColumn(layout.panelWidth)
+        .ctcColumn(layout.panelWidth)
     }
 
     // MARK: - Side rail (regular width, landscape)
@@ -308,9 +308,9 @@ struct MatchScreen: View {
             Spacer(minLength: 0)
 
             if controller.aiThinking {
-                banner(text: "The barons are moving...", fill: RBTheme.navy.opacity(0.85), enabled: false) {}
+                banner(text: "The barons are moving...", fill: CTCTheme.navy.opacity(0.85), enabled: false) {}
             } else if controller.humanTurn {
-                banner(text: "End Turn", fill: RBTheme.navy, enabled: true) {
+                banner(text: "End Turn", fill: CTCTheme.navy, enabled: true) {
                     withAnimation { controller.endTurn() }
                 }
             }
@@ -318,11 +318,11 @@ struct MatchScreen: View {
     }
 
     private var railHint: some View {
-        RBCard {
+        CTCCard {
             VStack(alignment: .leading, spacing: 6) {
-                Text("The River").font(RBTheme.display(16)).foregroundColor(RBTheme.navy)
+                Text("The River").font(CTCTheme.display(16)).foregroundColor(CTCTheme.navy)
                 Text("Tap a landing to read it and to order the fleet standing there. Downstream costs 1 move, upstream 2.")
-                    .font(RBTheme.body(13)).foregroundColor(RBTheme.inkSoft)
+                    .font(CTCTheme.body(13)).foregroundColor(CTCTheme.inkSoft)
                     .fixedSize(horizontal: false, vertical: true)
             }
         }
@@ -368,7 +368,7 @@ struct MatchScreen: View {
 
 // MARK: - Small shared helpers
 
-func rbRoman(_ n: Int) -> String {
+func ctcRoman(_ n: Int) -> String {
     switch n {
     case 1: return "I"
     case 2: return "II"
@@ -377,7 +377,7 @@ func rbRoman(_ n: Int) -> String {
     }
 }
 
-func rbKindName(_ k: RBNodeKind) -> String {
+func ctcKindName(_ k: CTCNodeKind) -> String {
     switch k {
     case .harbor: return "Harbor"
     case .island: return "Island"
@@ -387,7 +387,7 @@ func rbKindName(_ k: RBNodeKind) -> String {
 }
 
 /// A little compass rose for the recenter button.
-struct RBCompassGlyph: Shape {
+struct CTCCompassGlyph: Shape {
     func path(in rect: CGRect) -> Path {
         var p = Path()
         p.addEllipse(in: rect.insetBy(dx: rect.width * 0.08, dy: rect.height * 0.08))

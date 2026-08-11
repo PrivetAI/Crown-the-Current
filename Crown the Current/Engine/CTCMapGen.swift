@@ -4,7 +4,7 @@ import Foundation
 /// north-to-south into the Mouth, 2–4 tributaries joining it at confluences.
 /// Guarantees connectivity and Mouth reachability by construction, then
 /// validates anyway and regenerates with a salted seed on any failure.
-enum RBMapGen {
+enum CTCMapGen {
 
     static let namePrefixes = [
         "Alder", "Reed", "Gull", "Heron", "Willow", "Stone", "Ferry", "Marsh",
@@ -17,7 +17,7 @@ enum RBMapGen {
         "holm", "gate", "reach", "cross", "moor", "point", "shoal", "rest"
     ]
 
-    static func makeName(_ rng: inout RBRandom, used: inout Set<String>) -> String {
+    static func makeName(_ rng: inout CTCRandom, used: inout Set<String>) -> String {
         for _ in 0..<40 {
             let a = namePrefixes[rng.int(in: 0...(namePrefixes.count - 1))]
             let b = nameSuffixes[rng.int(in: 0...(nameSuffixes.count - 1))]
@@ -38,8 +38,8 @@ enum RBMapGen {
         while salt < 24 {
             var s = attempt(config: config, salt: salt, playerColor: playerColor)
             if validate(&s, players: config.opponents + 1) {
-                s.rng = RBRandom(seed: config.seed &* 31 &+ 977)
-                RBEngine.setupMatch(&s)
+                s.rng = CTCRandom(seed: config.seed &* 31 &+ 977)
+                CTCEngine.setupMatch(&s)
                 return s
             }
             salt += 1
@@ -47,13 +47,13 @@ enum RBMapGen {
         // Construction guarantees validity; this path is unreachable in
         // practice, but never trap — fall back to the raw attempt.
         var s = attempt(config: config, salt: 0, playerColor: playerColor)
-        s.rng = RBRandom(seed: config.seed &* 31 &+ 977)
-        RBEngine.setupMatch(&s)
+        s.rng = CTCRandom(seed: config.seed &* 31 &+ 977)
+        CTCEngine.setupMatch(&s)
         return s
     }
 
     static func attempt(config: SkirmishConfig, salt: UInt64, playerColor: Int) -> GameState {
-        var rng = RBRandom(seed: config.seed &+ salt &* 0x9E37)
+        var rng = CTCRandom(seed: config.seed &+ salt &* 0x9E37)
         var s = GameState()
         var used = Set<String>()
         var nextNode = 1
@@ -68,8 +68,8 @@ enum RBMapGen {
         }
         let tribCount = min(4, max(2, config.opponents + rng.int(in: 0...1)))
 
-        func addNode(_ kind: RBNodeKind, _ x: Double, _ y: Double, name: String? = nil) -> Int {
-            var n = RBNode(id: nextNode, name: name ?? makeName(&rng, used: &used), kind: kind, x: x, y: y)
+        func addNode(_ kind: CTCNodeKind, _ x: Double, _ y: Double, name: String? = nil) -> Int {
+            var n = CTCNode(id: nextNode, name: name ?? makeName(&rng, used: &used), kind: kind, x: x, y: y)
             if kind == .mouth { n.name = "The Mouth" }
             nextNode += 1
             s.nodes.append(n)
@@ -77,7 +77,7 @@ enum RBMapGen {
         }
 
         func addEdge(_ from: Int, _ to: Int) {
-            s.edges.append(RBEdge(id: nextEdge, from: from, to: to))
+            s.edges.append(CTCEdge(id: nextEdge, from: from, to: to))
             nextEdge += 1
         }
 
@@ -90,7 +90,7 @@ enum RBMapGen {
             let y = topY + (bottomY - topY) * t
             let meander = sin(t * 5.1 + Double(rng.int(in: 0...6))) * 150
             let x = 500.0 + meander + Double(rng.int(in: -40...40))
-            let kind: RBNodeKind
+            let kind: CTCNodeKind
             if i == mainLen - 1 { kind = .mouth }
             else if i == 0 { kind = .harbor }
             else { kind = rng.chance(0.4) ? .island : .harbor }
@@ -124,7 +124,7 @@ enum RBMapGen {
             for k in 0..<len {
                 let dx = side * (120 + Double(k) * 130) + Double(rng.int(in: -35...35))
                 let dy = -80 - Double(k) * 120 + Double(rng.int(in: -30...30))
-                let kind: RBNodeKind = (k == len - 1) ? .harbor : (rng.chance(0.45) ? .island : .harbor)
+                let kind: CTCNodeKind = (k == len - 1) ? .harbor : (rng.chance(0.45) ? .island : .harbor)
                 let id = addNode(kind, joinNode.x + dx, joinNode.y + dy)
                 ids.append(id)
                 addEdge(id, prev)   // flows downstream toward the join
@@ -202,7 +202,7 @@ enum RBMapGen {
             }
             let persona = isHuman ? "merchant" : personas[min(seat - 1, personas.count - 1)]
             let name = isHuman ? "You" : baronNames[min(seat - 1, baronNames.count - 1)]
-            var pl = RBPlayer(idx: seat, name: name, colorID: color, florins: 12,
+            var pl = CTCPlayer(idx: seat, name: name, colorID: color, florins: 12,
                               isHuman: isHuman, persona: persona, difficulty: config.difficulty)
             pl.eliminated = false
             s.players.append(pl)
@@ -212,7 +212,7 @@ enum RBMapGen {
                 s.nodes[ni].dock = 1
                 s.nodes[ni].yard = true
             }
-            let f = RBFleet(id: s.nextFleetID, owner: seat, node: startID, strength: 3, mp: RBEngine.fleetMP)
+            let f = CTCFleet(id: s.nextFleetID, owner: seat, node: startID, strength: 3, mp: CTCEngine.fleetMP)
             s.nextFleetID += 1
             s.fleets.append(f)
         }

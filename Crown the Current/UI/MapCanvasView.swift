@@ -4,7 +4,7 @@ import SwiftUI
 /// (on a regular-width side rail) the docked action panel. Every value is 0 on
 /// iPhone, which makes the viewport below exactly the full screen — i.e. the
 /// shipped phone camera math, unchanged.
-struct RBMapInset {
+struct CTCMapInset {
     var top: CGFloat = 0
     var bottom: CGFloat = 0
     var trailing: CGFloat = 0
@@ -12,11 +12,11 @@ struct RBMapInset {
 
 /// Camera transform shared by drawing and hit-testing. All math is anchored to
 /// the parent-passed screen size — never the Canvas closure's own size.
-struct RBCamera {
+struct CTCCamera {
     var scale: CGFloat = 1
     var offset: CGSize = .zero
     /// Reserved chrome. Zero on compact width.
-    var inset = RBMapInset()
+    var inset = CTCMapInset()
 
     /// The rectangle the river is fitted into and centred on. With zero insets
     /// this is the whole screen.
@@ -58,9 +58,9 @@ struct RBCamera {
 struct MapCanvasView: View {
     let state: GameState
     let screenSize: CGSize
-    let camera: RBCamera
+    let camera: CTCCamera
     let selectedNodeID: Int?
-    let reachable: [Int: RBRoute]
+    let reachable: [Int: CTCRoute]
 
     var body: some View {
         TimelineView(.animation(minimumInterval: 1.0 / 30.0)) { timeline in
@@ -71,7 +71,7 @@ struct MapCanvasView: View {
         }
     }
 
-    private func pt(_ n: RBNode) -> CGPoint {
+    private func pt(_ n: CTCNode) -> CGPoint {
         camera.toScreen(CGPoint(x: n.x, y: n.y), screen: screenSize,
                         mapW: CGFloat(state.mapW), mapH: CGFloat(state.mapH))
     }
@@ -113,28 +113,28 @@ struct MapCanvasView: View {
                 width: (66 + h2 * 40) * sc,
                 height: (40 + h1 * 26) * sc)
             ctx.fill(Path(ellipseIn: grove),
-                     with: .color(RBTheme.bankGreen.opacity(0.16 + 0.08 * Double(h3))))
+                     with: .color(CTCTheme.bankGreen.opacity(0.16 + 0.08 * Double(h3))))
             let field = CGRect(
                 x: p.x - side * (66 + h3 * 50) * sc - 30 * sc,
                 y: p.y + (18 + h2 * 44) * sc,
                 width: (58 + h1 * 36) * sc,
                 height: (30 + h2 * 22) * sc)
             ctx.fill(Path(roundedRect: field, cornerRadius: 14 * sc),
-                     with: .color(RBTheme.wheat.opacity(0.16 + 0.08 * Double(h1))))
+                     with: .color(CTCTheme.wheat.opacity(0.16 + 0.08 * Double(h1))))
             if h2 > 0.55 {
                 let copse = CGRect(x: p.x + side * 34 * sc, y: p.y + (52 + h1 * 30) * sc,
                                    width: 26 * sc, height: 26 * sc)
                 ctx.fill(Path(ellipseIn: copse),
-                         with: .color(RBTheme.bankGreenDeep.opacity(0.2)))
+                         with: .color(CTCTheme.bankGreenDeep.opacity(0.2)))
             }
         }
     }
 
-    private func edgeVisible(_ e: RBEdge) -> Bool {
+    private func edgeVisible(_ e: CTCEdge) -> Bool {
         state.isDiscovered(e.from) || state.isDiscovered(e.to)
     }
 
-    private func edgePath(_ e: RBEdge) -> Path? {
+    private func edgePath(_ e: CTCEdge) -> Path? {
         guard let a = state.node(e.from), let b = state.node(e.to) else { return nil }
         let pa = pt(a)
         let pb = pt(b)
@@ -155,17 +155,17 @@ struct MapCanvasView: View {
             guard let path = edgePath(e) else { continue }
             let discovered = edgeVisible(e)
             if !discovered {
-                ctx.stroke(path, with: .color(RBTheme.fog.opacity(0.30)),
+                ctx.stroke(path, with: .color(CTCTheme.fog.opacity(0.30)),
                            style: StrokeStyle(lineWidth: 20 * sc, lineCap: .round))
                 continue
             }
             // Banded water: deep base, mid band, light animated flow dashes.
-            ctx.stroke(path, with: .color(RBTheme.riverDeep),
+            ctx.stroke(path, with: .color(CTCTheme.riverDeep),
                        style: StrokeStyle(lineWidth: 24 * sc, lineCap: .round))
-            ctx.stroke(path, with: .color(RBTheme.riverMid),
+            ctx.stroke(path, with: .color(CTCTheme.riverMid),
                        style: StrokeStyle(lineWidth: 15 * sc, lineCap: .round))
             let phase = -CGFloat(time.truncatingRemainder(dividingBy: 60)) * 26 * sc
-            ctx.stroke(path, with: .color(RBTheme.riverLight.opacity(0.85)),
+            ctx.stroke(path, with: .color(CTCTheme.riverLight.opacity(0.85)),
                        style: StrokeStyle(lineWidth: 3.2 * sc, lineCap: .round,
                                           dash: [9 * sc, 13 * sc], dashPhase: phase))
 
@@ -181,8 +181,8 @@ struct MapCanvasView: View {
                     diamond.addLine(to: CGPoint(x: mid.x, y: mid.y + r))
                     diamond.addLine(to: CGPoint(x: mid.x - r, y: mid.y))
                     diamond.closeSubpath()
-                    ctx.fill(diamond, with: .color(RBTheme.goldLine))
-                    ctx.stroke(diamond, with: .color(RBTheme.ink.opacity(0.5)),
+                    ctx.fill(diamond, with: .color(CTCTheme.goldLine))
+                    ctx.stroke(diamond, with: .color(CTCTheme.ink.opacity(0.5)),
                                style: StrokeStyle(lineWidth: 1.2 * sc))
                 }
                 if e.damOwner != -1 {
@@ -197,7 +197,7 @@ struct MapCanvasView: View {
                     bar.addLine(to: CGPoint(x: mid.x - px * half, y: mid.y - py * half))
                     ctx.stroke(bar, with: .color(Color(red: 0.45, green: 0.33, blue: 0.2)),
                                style: StrokeStyle(lineWidth: 10 * sc, lineCap: .round))
-                    ctx.stroke(bar, with: .color(RBTheme.ownerColor(e.damOwner, players: state.players)),
+                    ctx.stroke(bar, with: .color(CTCTheme.ownerColor(e.damOwner, players: state.players)),
                                style: StrokeStyle(lineWidth: 3.4 * sc, lineCap: .round))
                 }
             }
@@ -212,17 +212,17 @@ struct MapCanvasView: View {
 
             if !discovered {
                 let rect = CGRect(x: p.x - r, y: p.y - r, width: r * 2, height: r * 2)
-                ctx.fill(Path(ellipseIn: rect), with: .color(RBTheme.fog.opacity(0.55)))
-                ctx.stroke(Path(ellipseIn: rect), with: .color(RBTheme.fog.opacity(0.8)),
+                ctx.fill(Path(ellipseIn: rect), with: .color(CTCTheme.fog.opacity(0.55)))
+                ctx.stroke(Path(ellipseIn: rect), with: .color(CTCTheme.fog.opacity(0.8)),
                            style: StrokeStyle(lineWidth: 2 * sc, dash: [4 * sc, 4 * sc]))
                 continue
             }
 
-            let ring = RBTheme.ownerColor(n.owner, players: state.players)
+            let ring = CTCTheme.ownerColor(n.owner, players: state.players)
             let tokenRect = CGRect(x: p.x - r, y: p.y - r, width: r * 2, height: r * 2)
             ctx.fill(Path(ellipseIn: tokenRect.insetBy(dx: -3.5 * sc, dy: -3.5 * sc)),
-                     with: .color(RBTheme.ink.opacity(0.18)))
-            ctx.fill(Path(ellipseIn: tokenRect), with: .color(RBTheme.card))
+                     with: .color(CTCTheme.ink.opacity(0.18)))
+            ctx.fill(Path(ellipseIn: tokenRect), with: .color(CTCTheme.card))
             ctx.stroke(Path(ellipseIn: tokenRect), with: .color(ring),
                        style: StrokeStyle(lineWidth: (n.owner == -1 ? 2.4 : 4.2) * sc))
 
@@ -233,7 +233,7 @@ struct MapCanvasView: View {
             if s > 0.42 {
                 let label = Text(n.name)
                     .font(.custom("Georgia", size: max(8, 11.5 * sc)))
-                    .foregroundColor(RBTheme.ink.opacity(0.82))
+                    .foregroundColor(CTCTheme.ink.opacity(0.82))
                 ctx.draw(label, at: CGPoint(x: p.x, y: p.y + r + 11 * sc), anchor: .center)
             }
 
@@ -241,7 +241,7 @@ struct MapCanvasView: View {
             if n.kind == .mouth, n.owner >= 0, n.owner < state.players.count {
                 let held = state.players[n.owner].mouthTurns
                 if held > 0 {
-                    let txt = Text("\(held)/\(RBEngine.mouthHoldNeeded)")
+                    let txt = Text("\(held)/\(CTCEngine.mouthHoldNeeded)")
                         .font(.custom("Menlo-Bold", size: max(8, 11 * sc)))
                         .foregroundColor(.white)
                     let chipRect = CGRect(x: p.x - 17 * sc, y: p.y - r - 22 * sc,
@@ -253,8 +253,8 @@ struct MapCanvasView: View {
         }
     }
 
-    private func drawKindGlyph(_ ctx: inout GraphicsContext, node n: RBNode, at p: CGPoint, r: CGFloat, sc: CGFloat) {
-        let glyphColor = RBTheme.riverDeep.opacity(0.85)
+    private func drawKindGlyph(_ ctx: inout GraphicsContext, node n: CTCNode, at p: CGPoint, r: CGFloat, sc: CGFloat) {
+        let glyphColor = CTCTheme.riverDeep.opacity(0.85)
         switch n.kind {
         case .harbor:
             var quay = Path()
@@ -282,7 +282,7 @@ struct MapCanvasView: View {
             ctx.stroke(fork, with: .color(glyphColor), style: StrokeStyle(lineWidth: 2.6 * sc, lineCap: .round))
         case .mouth:
             let inner = CGRect(x: p.x - 10 * sc, y: p.y - 10 * sc, width: 20 * sc, height: 20 * sc)
-            ctx.stroke(Path(ellipseIn: inner), with: .color(RBTheme.goldLine),
+            ctx.stroke(Path(ellipseIn: inner), with: .color(CTCTheme.goldLine),
                        style: StrokeStyle(lineWidth: 2.6 * sc))
             var waves = Path()
             waves.move(to: CGPoint(x: p.x - 6 * sc, y: p.y + 2 * sc))
@@ -294,7 +294,7 @@ struct MapCanvasView: View {
         }
     }
 
-    private func drawBuildingPips(_ ctx: inout GraphicsContext, node n: RBNode, at p: CGPoint, r: CGFloat, sc: CGFloat) {
+    private func drawBuildingPips(_ ctx: inout GraphicsContext, node n: CTCNode, at p: CGPoint, r: CGFloat, sc: CGFloat) {
         // Dock pips: gold squares in a row under the token.
         if n.dock > 0 {
             let pip = 7 * sc
@@ -302,9 +302,9 @@ struct MapCanvasView: View {
             var x = p.x - total / 2
             for _ in 0..<n.dock {
                 let rect = CGRect(x: x, y: p.y + r + 20 * sc, width: pip, height: pip)
-                ctx.fill(Path(roundedRect: rect, cornerRadius: 1.6 * sc), with: .color(RBTheme.goldLine))
+                ctx.fill(Path(roundedRect: rect, cornerRadius: 1.6 * sc), with: .color(CTCTheme.goldLine))
                 ctx.stroke(Path(roundedRect: rect, cornerRadius: 1.6 * sc),
-                           with: .color(RBTheme.ink.opacity(0.4)), style: StrokeStyle(lineWidth: 1 * sc))
+                           with: .color(CTCTheme.ink.opacity(0.4)), style: StrokeStyle(lineWidth: 1 * sc))
                 x += pip + 3 * sc
             }
         }
@@ -316,13 +316,13 @@ struct MapCanvasView: View {
             sail.addLine(to: CGPoint(x: rect.maxX, y: rect.maxY))
             sail.addLine(to: CGPoint(x: rect.minX, y: rect.maxY))
             sail.closeSubpath()
-            ctx.fill(sail, with: .color(RBTheme.navy))
+            ctx.fill(sail, with: .color(CTCTheme.navy))
             ctx.stroke(sail, with: .color(.white), style: StrokeStyle(lineWidth: 1.2 * sc))
         }
         // Watchtower: small tower pip top-left.
         if n.tower {
             let rect = CGRect(x: p.x - r * 0.62 - 14 * sc, y: p.y - r - 10 * sc, width: 13 * sc, height: 15 * sc)
-            let tower = RBTowerIcon().path(in: rect)
+            let tower = CTCTowerIcon().path(in: rect)
             ctx.fill(tower, with: .color(Color(red: 0.52, green: 0.4, blue: 0.26)))
         }
     }
@@ -339,15 +339,15 @@ struct MapCanvasView: View {
                 let dist = r + 21 * sc
                 let fp = CGPoint(x: p.x + CGFloat(cos(angle)) * dist,
                                  y: p.y + CGFloat(sin(angle)) * dist - 4 * sc)
-                let color = RBTheme.ownerColor(f.owner, players: state.players)
+                let color = CTCTheme.ownerColor(f.owner, players: state.players)
                 let box = CGRect(x: fp.x - 11 * sc, y: fp.y - 12 * sc, width: 22 * sc, height: 22 * sc)
                 ctx.fill(Path(ellipseIn: box.insetBy(dx: -3 * sc, dy: -3 * sc)),
                          with: .color(Color.white.opacity(0.75)))
-                let sail = RBSailIcon().path(in: box)
+                let sail = CTCSailIcon().path(in: box)
                 ctx.fill(sail, with: .color(color))
                 // Strength chip.
                 let chip = CGRect(x: fp.x + 6 * sc, y: fp.y + 3 * sc, width: 17 * sc, height: 13 * sc)
-                ctx.fill(Path(roundedRect: chip, cornerRadius: 4 * sc), with: .color(RBTheme.ink))
+                ctx.fill(Path(roundedRect: chip, cornerRadius: 4 * sc), with: .color(CTCTheme.ink))
                 let txt = Text("\(f.strength)")
                     .font(.custom("Menlo-Bold", size: max(7, 9.5 * sc)))
                     .foregroundColor(.white)
@@ -357,7 +357,7 @@ struct MapCanvasView: View {
                     for m in 0..<min(f.mp, 3) {
                         let dot = CGRect(x: fp.x - 10 * sc + CGFloat(m) * 7 * sc,
                                          y: fp.y + 12 * sc, width: 4.6 * sc, height: 4.6 * sc)
-                        ctx.fill(Path(ellipseIn: dot), with: .color(RBTheme.good))
+                        ctx.fill(Path(ellipseIn: dot), with: .color(CTCTheme.good))
                     }
                 }
             }
@@ -372,7 +372,7 @@ struct MapCanvasView: View {
             let r = (n.kind == .mouth ? 30.0 : 24.0) * sc + 7 * sc
             let ring = CGRect(x: p.x - r, y: p.y - r, width: r * 2, height: r * 2)
             let hostile = state.fleetsAt(nodeID).contains { $0.owner != 0 }
-            let color = hostile ? RBTheme.danger : RBTheme.good
+            let color = hostile ? CTCTheme.danger : CTCTheme.good
             ctx.fill(Path(ellipseIn: ring), with: .color(color.opacity(0.16)))
             ctx.stroke(Path(ellipseIn: ring), with: .color(color.opacity(0.85)),
                        style: StrokeStyle(lineWidth: 2.6 * sc, dash: [6 * sc, 5 * sc]))
@@ -389,7 +389,7 @@ struct MapCanvasView: View {
             let pulse = CGFloat(1 + 0.06 * sin(time * 5))
             let r = ((n.kind == .mouth ? 30.0 : 24.0) * sc + 10 * sc) * pulse
             let ring = CGRect(x: p.x - r, y: p.y - r, width: r * 2, height: r * 2)
-            ctx.stroke(Path(ellipseIn: ring), with: .color(RBTheme.goldLine),
+            ctx.stroke(Path(ellipseIn: ring), with: .color(CTCTheme.goldLine),
                        style: StrokeStyle(lineWidth: 3.4 * sc))
         }
     }

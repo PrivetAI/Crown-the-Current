@@ -1,7 +1,7 @@
 import SwiftUI
 import WebKit
 
-struct RiverBaronWebPanel: UIViewRepresentable {
+struct CrownTheCurrentWebPanel: UIViewRepresentable {
     let urlString: String
 
     func makeUIView(context: Context) -> WKWebView {

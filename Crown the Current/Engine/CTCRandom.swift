@@ -2,7 +2,7 @@ import Foundation
 
 /// Deterministic seeded RNG (SplitMix64). Used for ALL combat rolls, AI mistake
 /// rolls and tiebreaks so a match is resume-safe and replayable from its seed.
-struct RBRandom: Codable, Equatable {
+struct CTCRandom: Codable, Equatable {
     var state: UInt64
 
     init(seed: UInt64) {

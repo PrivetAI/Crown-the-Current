@@ -1,21 +1,21 @@
 import SwiftUI
 
 struct ChronicleView: View {
-    @ObservedObject var store = RBStore.shared
+    @ObservedObject var store = CTCStore.shared
     @Environment(\.horizontalSizeClass) private var hSize
     @State private var section = 0
 
-    private var layout: RBLayout { RBLayout(hSize) }
+    private var layout: CTCLayout { CTCLayout(hSize) }
 
     var body: some View {
         VStack(spacing: 0) {
-            RBRibbonHeader(title: "Chronicle")
+            CTCRibbonHeader(title: "Chronicle")
                 .padding(.top, 6)
-                .rbColumn(layout.gridWidth)
+                .ctcColumn(layout.gridWidth)
                 .padding(.horizontal, 14)
 
-            RBArtBanner(imageName: "rb_chronicle", height: layout.regular ? 170 : 104)
-                .rbColumn(layout.gridWidth)
+            CTCArtBanner(imageName: "ctc_chronicle", height: layout.regular ? 170 : 104)
+                .ctcColumn(layout.gridWidth)
                 .padding(.horizontal, 14).padding(.top, 10)
 
             HStack(spacing: 6) {
@@ -23,7 +23,7 @@ struct ChronicleView: View {
                 tab("Banners", 1)
                 tab("Honours", 2)
             }
-            .rbColumn(layout.readingWidth)
+            .ctcColumn(layout.readingWidth)
             .padding(.horizontal, 14).padding(.vertical, 10)
 
             ScrollView {
@@ -34,22 +34,22 @@ struct ChronicleView: View {
                     default: honoursSection
                     }
                 }
-                .rbColumn(layout.gridWidth)
+                .ctcColumn(layout.gridWidth)
                 .padding(.horizontal, 14)
                 .padding(.bottom, 24)
             }
         }
-        .background(RBTheme.parchment.ignoresSafeArea())
+        .background(CTCTheme.parchment.ignoresSafeArea())
         .navigationBarHidden(true)
     }
 
     private func tab(_ label: String, _ i: Int) -> some View {
         let active = section == i
         return Button { store.tap(); section = i } label: {
-            Text(label).font(RBTheme.body(13)).foregroundColor(active ? .white : RBTheme.ink)
+            Text(label).font(CTCTheme.body(13)).foregroundColor(active ? .white : CTCTheme.ink)
                 .frame(maxWidth: .infinity).padding(.vertical, 8)
-                .background(RoundedRectangle(cornerRadius: 8).fill(active ? RBTheme.navy : RBTheme.card)
-                    .overlay(RoundedRectangle(cornerRadius: 8).strokeBorder(RBTheme.cardBorder, lineWidth: active ? 0 : 1)))
+                .background(RoundedRectangle(cornerRadius: 8).fill(active ? CTCTheme.navy : CTCTheme.card)
+                    .overlay(RoundedRectangle(cornerRadius: 8).strokeBorder(CTCTheme.cardBorder, lineWidth: active ? 0 : 1)))
         }
         .buttonStyle(.plain)
     }
@@ -59,7 +59,7 @@ struct ChronicleView: View {
     private var recordsSection: some View {
         let s = store.root.stats
         return VStack(spacing: 12) {
-            RBCard {
+            CTCCard {
                 LazyVGrid(columns: layout.columns(layout.tileColumns), spacing: 12) {
                     statTile("Campaign Stars", "\(store.root.totalStars)/42")
                     statTile("Matches Won", "\(s.matchesWon)")
@@ -78,13 +78,13 @@ struct ChronicleView: View {
 
     private func statTile(_ title: String, _ value: String) -> some View {
         VStack(spacing: 3) {
-            Text(value).font(RBTheme.num(22)).foregroundColor(RBTheme.navy)
-            Text(title).font(RBTheme.body(12)).foregroundColor(RBTheme.inkSoft)
+            Text(value).font(CTCTheme.num(22)).foregroundColor(CTCTheme.navy)
+            Text(title).font(CTCTheme.body(12)).foregroundColor(CTCTheme.inkSoft)
                 .multilineTextAlignment(.center)
         }
         .frame(maxWidth: .infinity)
         .padding(.vertical, 12)
-        .background(RoundedRectangle(cornerRadius: 10).fill(RBTheme.parchment))
+        .background(RoundedRectangle(cornerRadius: 10).fill(CTCTheme.parchment))
     }
 
     // MARK: banners
@@ -92,10 +92,10 @@ struct ChronicleView: View {
     private var bannersSection: some View {
         VStack(spacing: 12) {
             Text("Choose the colors you sail under. New banners unlock as you conquer the river.")
-                .font(RBTheme.body(13)).foregroundColor(RBTheme.inkSoft)
+                .font(CTCTheme.body(13)).foregroundColor(CTCTheme.inkSoft)
                 .multilineTextAlignment(.center)
             LazyVGrid(columns: layout.columns(layout.regular ? 3 : 2), spacing: 12) {
-                ForEach(0..<RBTheme.banners.count, id: \.self) { i in
+                ForEach(0..<CTCTheme.banners.count, id: \.self) { i in
                     bannerCard(i)
                 }
             }
@@ -113,26 +113,26 @@ struct ChronicleView: View {
         } label: {
             VStack(spacing: 8) {
                 ZStack {
-                    RBBannerShape().fill(unlocked ? RBTheme.bannerColor(i) : RBTheme.inkSoft.opacity(0.25))
+                    CTCBannerShape().fill(unlocked ? CTCTheme.bannerColor(i) : CTCTheme.inkSoft.opacity(0.25))
                         .frame(width: 54, height: 64)
-                    RBBannerShape().strokeBorder(RBTheme.ink.opacity(0.25), lineWidth: 1.2)
+                    CTCBannerShape().strokeBorder(CTCTheme.ink.opacity(0.25), lineWidth: 1.2)
                         .frame(width: 54, height: 64)
                 }
-                Text(RBTheme.bannerNames[i]).font(RBTheme.display(14))
-                    .foregroundColor(unlocked ? RBTheme.ink : RBTheme.inkSoft)
+                Text(CTCTheme.bannerNames[i]).font(CTCTheme.display(14))
+                    .foregroundColor(unlocked ? CTCTheme.ink : CTCTheme.inkSoft)
                 if unlocked {
                     Text(selected ? "Flying" : "Tap to fly")
-                        .font(RBTheme.body(11)).foregroundColor(selected ? RBTheme.good : RBTheme.inkSoft)
+                        .font(CTCTheme.body(11)).foregroundColor(selected ? CTCTheme.good : CTCTheme.inkSoft)
                 } else {
-                    Text(RootState.bannerHint(i)).font(RBTheme.body(10)).foregroundColor(RBTheme.inkSoft)
+                    Text(RootState.bannerHint(i)).font(CTCTheme.body(10)).foregroundColor(CTCTheme.inkSoft)
                         .multilineTextAlignment(.center).lineLimit(2)
                 }
             }
             .frame(maxWidth: .infinity)
             .padding(.vertical, 12)
-            .background(RoundedRectangle(cornerRadius: 12).fill(RBTheme.card)
+            .background(RoundedRectangle(cornerRadius: 12).fill(CTCTheme.card)
                 .overlay(RoundedRectangle(cornerRadius: 12)
-                    .strokeBorder(selected ? RBTheme.goldLine : RBTheme.cardBorder, lineWidth: selected ? 2.2 : 1)))
+                    .strokeBorder(selected ? CTCTheme.goldLine : CTCTheme.cardBorder, lineWidth: selected ? 2.2 : 1)))
         }
         .buttonStyle(.plain)
     }
@@ -142,23 +142,23 @@ struct ChronicleView: View {
     private var honoursSection: some View {
         let earned = Set(store.root.achievements)
         return VStack(spacing: 10) {
-            Text("\(earned.count) of \(RBAchievements.all.count) honours earned")
-                .font(RBTheme.body(13)).foregroundColor(RBTheme.inkSoft)
-            ForEach(RBAchievements.all) { a in
+            Text("\(earned.count) of \(CTCAchievements.all.count) honours earned")
+                .font(CTCTheme.body(13)).foregroundColor(CTCTheme.inkSoft)
+            ForEach(CTCAchievements.all) { a in
                 let got = earned.contains(a.id)
-                RBCard {
+                CTCCard {
                     HStack(spacing: 12) {
                         ZStack {
-                            Circle().fill(got ? RBTheme.goldLine.opacity(0.22) : RBTheme.inkSoft.opacity(0.12))
+                            Circle().fill(got ? CTCTheme.goldLine.opacity(0.22) : CTCTheme.inkSoft.opacity(0.12))
                                 .frame(width: 40, height: 40)
-                            RBLaurelIcon().stroke(got ? RBTheme.goldLine : RBTheme.inkSoft.opacity(0.4),
+                            CTCLaurelIcon().stroke(got ? CTCTheme.goldLine : CTCTheme.inkSoft.opacity(0.4),
                                                   style: StrokeStyle(lineWidth: 1.6, lineCap: .round))
                                 .frame(width: 26, height: 26)
                         }
                         VStack(alignment: .leading, spacing: 2) {
-                            Text(a.title).font(RBTheme.display(15))
-                                .foregroundColor(got ? RBTheme.ink : RBTheme.inkSoft)
-                            Text(a.detail).font(RBTheme.body(12)).foregroundColor(RBTheme.inkSoft)
+                            Text(a.title).font(CTCTheme.display(15))
+                                .foregroundColor(got ? CTCTheme.ink : CTCTheme.inkSoft)
+                            Text(a.detail).font(CTCTheme.body(12)).foregroundColor(CTCTheme.inkSoft)
                                 .fixedSize(horizontal: false, vertical: true)
                         }
                         Spacer()
@@ -167,14 +167,14 @@ struct ChronicleView: View {
                 .opacity(got ? 1 : 0.75)
             }
         }
-        .rbColumn(layout.readingWidth)
+        .ctcColumn(layout.readingWidth)
     }
 }
 
 /// Simple swallowtail banner silhouette.
-struct RBBannerShape: InsettableShape {
+struct CTCBannerShape: InsettableShape {
     var inset: CGFloat = 0
-    func inset(by amount: CGFloat) -> RBBannerShape {
+    func inset(by amount: CGFloat) -> CTCBannerShape {
         var c = self; c.inset += amount; return c
     }
     func path(in rect: CGRect) -> Path {

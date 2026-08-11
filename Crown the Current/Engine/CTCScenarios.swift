@@ -2,7 +2,7 @@ import Foundation
 
 /// The 14 authored campaign scenarios across 3 acts. Every map is hand-laid:
 /// node ordinals are 1-based within a blueprint; edges run upstream -> downstream.
-enum RBScenarios {
+enum CTCScenarios {
 
     struct Meta: Identifiable {
         let id: Int
@@ -119,7 +119,7 @@ enum RBScenarios {
         var mouthGuard: Int = 8    // neutral Harbor Garrison strength at the Mouth
     }
 
-    private static func kind(_ c: Character) -> RBNodeKind {
+    private static func kind(_ c: Character) -> CTCNodeKind {
         switch c {
         case "i": return .island
         case "c": return .confluence
@@ -131,12 +131,12 @@ enum RBScenarios {
     private static func assemble(_ bp: Blueprint, meta: Meta, seed: UInt64, playerColor: Int) -> GameState {
         var s = GameState()
         for (i, spec) in bp.nodes.enumerated() {
-            let n = RBNode(id: i + 1, name: spec.0, kind: kind(spec.1), x: spec.2, y: spec.3)
+            let n = CTCNode(id: i + 1, name: spec.0, kind: kind(spec.1), x: spec.2, y: spec.3)
             s.nodes.append(n)
             if n.kind == .mouth { s.mouthID = n.id }
         }
         for (i, e) in bp.edges.enumerated() {
-            var edge = RBEdge(id: i + 1, from: e.0, to: e.1)
+            var edge = CTCEdge(id: i + 1, from: e.0, to: e.1)
             edge.toll = bp.tolls.contains(i + 1)
             s.edges.append(edge)
         }
@@ -155,26 +155,26 @@ enum RBScenarios {
         }
 
         var colorPool = [1, 0, 2, 3, 4, 5].filter { $0 != playerColor }
-        var human = RBPlayer(idx: 0, name: "You", colorID: playerColor, florins: bp.playerFlorins,
+        var human = CTCPlayer(idx: 0, name: "You", colorID: playerColor, florins: bp.playerFlorins,
                              isHuman: true, persona: "merchant", difficulty: "hard")
         human.eliminated = false
         s.players.append(human)
         for (i, b) in bp.barons.enumerated() {
             let color = colorPool.isEmpty ? i + 1 : colorPool.removeFirst()
-            let pl = RBPlayer(idx: i + 1, name: b.0, colorID: color, florins: b.3,
+            let pl = CTCPlayer(idx: i + 1, name: b.0, colorID: color, florins: b.3,
                               isHuman: false, persona: b.1, difficulty: b.2)
             s.players.append(pl)
         }
         for f in bp.fleets {
-            s.fleets.append(RBFleet(id: s.nextFleetID, owner: f.1, node: f.0, strength: f.2, mp: RBEngine.fleetMP))
+            s.fleets.append(CTCFleet(id: s.nextFleetID, owner: f.1, node: f.0, strength: f.2, mp: CTCEngine.fleetMP))
             s.nextFleetID += 1
         }
         for p in bp.pirates {
-            s.fleets.append(RBFleet(id: s.nextFleetID, owner: -1, node: p.0, strength: p.1, mp: 0))
+            s.fleets.append(CTCFleet(id: s.nextFleetID, owner: -1, node: p.0, strength: p.1, mp: 0))
             s.nextFleetID += 1
         }
         if bp.mouthGuard > 0 {
-            s.fleets.append(RBFleet(id: s.nextFleetID, owner: RBEngine.garrisonOwner,
+            s.fleets.append(CTCFleet(id: s.nextFleetID, owner: CTCEngine.garrisonOwner,
                                     node: s.mouthID, strength: bp.mouthGuard, mp: 0))
             s.nextFleetID += 1
         }
@@ -183,11 +183,11 @@ enum RBScenarios {
         s.fogEnabled = meta.fog
         s.floodEvery = meta.flood
         s.piratesOn = meta.pirates
-        s.rng = RBRandom(seed: seed &* 6364136223846793005 &+ UInt64(meta.id))
+        s.rng = CTCRandom(seed: seed &* 6364136223846793005 &+ UInt64(meta.id))
         s.mapW = 1000
         s.mapH = 1400
         s.normalizeTallies()
-        RBEngine.setupMatch(&s)
+        CTCEngine.setupMatch(&s)
         return s
     }
 

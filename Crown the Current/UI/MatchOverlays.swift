@@ -5,14 +5,14 @@ import SwiftUI
 /// A ScrollView fills whatever height it is offered, so a two-line summary was
 /// rendering inside a 340pt slab of empty parchment. Measuring the content lets
 /// the card hug short news while still capping and scrolling a long turn.
-private struct RBHeightKey: PreferenceKey {
+private struct CTCHeightKey: PreferenceKey {
     static var defaultValue: CGFloat = 0
     static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
         value = max(value, nextValue())
     }
 }
 
-private struct RBFittedScroll<Content: View>: View {
+private struct CTCFittedScroll<Content: View>: View {
     let cap: CGFloat
     let content: Content
     @State private var contentHeight: CGFloat = 0
@@ -26,17 +26,17 @@ private struct RBFittedScroll<Content: View>: View {
         ScrollView {
             content
                 .background(GeometryReader { g in
-                    Color.clear.preference(key: RBHeightKey.self, value: g.size.height)
+                    Color.clear.preference(key: CTCHeightKey.self, value: g.size.height)
                 })
         }
         .frame(height: contentHeight > 0 ? min(contentHeight, cap) : nil)
-        .onPreferenceChange(RBHeightKey.self) { contentHeight = $0 }
+        .onPreferenceChange(CTCHeightKey.self) { contentHeight = $0 }
     }
 }
 
 // MARK: - Dim scrim wrapper
 
-private struct RBScrim<Content: View>: View {
+private struct CTCScrim<Content: View>: View {
     let content: Content
     init(@ViewBuilder content: () -> Content) { self.content = content() }
     var body: some View {
@@ -53,21 +53,21 @@ private struct RBScrim<Content: View>: View {
 // MARK: - Battle math
 
 struct BattleMathView: View {
-    let report: RBBattleReport
+    let report: CTCBattleReport
     let detail: Bool
-    let players: [RBPlayer]
+    let players: [CTCPlayer]
 
     private func name(_ owner: Int) -> String {
         if owner == 0 { return "You" }
         if owner == -1 { return "Pirates" }
-        if owner == RBEngine.garrisonOwner { return "Garrison" }
+        if owner == CTCEngine.garrisonOwner { return "Garrison" }
         return players.indices.contains(owner) ? players[owner].name : "Rival"
     }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
             Text("Battle at \(report.nodeName)")
-                .font(RBTheme.display(15)).foregroundColor(RBTheme.ink)
+                .font(CTCTheme.display(15)).foregroundColor(CTCTheme.ink)
             if detail {
                 mathLine(name(report.attacker), base: report.atkStr,
                          mods: [("flow", report.atkFlow), ("roll", report.atkRoll)],
@@ -79,30 +79,30 @@ struct BattleMathView: View {
             let winnerOwner = report.attackerWon ? report.attacker : report.defender
             let winner = name(winnerOwner)
             HStack(spacing: 5) {
-                Text("\(winner) \(RBEngine.verb(winnerOwner, "prevail", "prevails"))")
-                    .font(RBTheme.body(13)).foregroundColor(RBTheme.good)
+                Text("\(winner) \(CTCEngine.verb(winnerOwner, "prevail", "prevails"))")
+                    .font(CTCTheme.body(13)).foregroundColor(CTCTheme.good)
                 if report.winnerLoss > 0 {
                     Text("(lost \(report.winnerLoss) strength)")
-                        .font(RBTheme.body(12)).foregroundColor(RBTheme.inkSoft)
+                        .font(CTCTheme.body(12)).foregroundColor(CTCTheme.inkSoft)
                 }
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(11)
-        .background(RoundedRectangle(cornerRadius: 10).fill(RBTheme.parchment))
+        .background(RoundedRectangle(cornerRadius: 10).fill(CTCTheme.parchment))
     }
 
     private func mathLine(_ who: String, base: Int, mods: [(String, Int)], total: Int, win: Bool) -> some View {
         let parts = mods.filter { $0.1 != 0 }.map { "\($0.1 > 0 ? "+" : "")\($0.1) \($0.0)" }
         return HStack(spacing: 6) {
-            Text(who).font(RBTheme.body(13)).foregroundColor(win ? RBTheme.ink : RBTheme.inkSoft)
+            Text(who).font(CTCTheme.body(13)).foregroundColor(win ? CTCTheme.ink : CTCTheme.inkSoft)
                 .frame(width: 92, alignment: .leading).lineLimit(1).minimumScaleFactor(0.7)
-            Text("\(base)").font(RBTheme.num(13)).foregroundColor(RBTheme.ink)
+            Text("\(base)").font(CTCTheme.num(13)).foregroundColor(CTCTheme.ink)
             if !parts.isEmpty {
-                Text(parts.joined(separator: " ")).font(RBTheme.numLight(12)).foregroundColor(RBTheme.inkSoft)
+                Text(parts.joined(separator: " ")).font(CTCTheme.numLight(12)).foregroundColor(CTCTheme.inkSoft)
             }
             Spacer()
-            Text("= \(total)").font(RBTheme.num(14)).foregroundColor(win ? RBTheme.good : RBTheme.danger)
+            Text("= \(total)").font(CTCTheme.num(14)).foregroundColor(win ? CTCTheme.good : CTCTheme.danger)
         }
     }
 }
@@ -110,16 +110,16 @@ struct BattleMathView: View {
 // MARK: - Battle review (human's own strike)
 
 struct BattleReviewOverlay: View {
-    let reports: [RBBattleReport]
+    let reports: [CTCBattleReport]
     let detail: Bool
-    let players: [RBPlayer]
+    let players: [CTCPlayer]
     let onDismiss: () -> Void
 
     var body: some View {
-        RBScrim {
+        CTCScrim {
             VStack(spacing: 14) {
-                RBRibbonHeader(title: reports.count > 1 ? "Battle Reports" : "Battle Report")
-                RBFittedScroll(cap: 320) {
+                CTCRibbonHeader(title: reports.count > 1 ? "Battle Reports" : "Battle Report")
+                CTCFittedScroll(cap: 320) {
                     VStack(spacing: 10) {
                         ForEach(reports) { r in
                             BattleMathView(report: r, detail: detail, players: players)
@@ -127,11 +127,11 @@ struct BattleReviewOverlay: View {
                     }
                 }
                 Button(action: onDismiss) { Text("Continue").frame(maxWidth: .infinity) }
-                    .buttonStyle(RBButtonStyle())
+                    .buttonStyle(CTCButtonStyle())
             }
             .padding(16)
-            .background(RoundedRectangle(cornerRadius: 18).fill(RBTheme.card)
-                .overlay(RoundedRectangle(cornerRadius: 18).strokeBorder(RBTheme.cardBorder, lineWidth: 1.4)))
+            .background(RoundedRectangle(cornerRadius: 18).fill(CTCTheme.card)
+                .overlay(RoundedRectangle(cornerRadius: 18).strokeBorder(CTCTheme.cardBorder, lineWidth: 1.4)))
         }
     }
 }
@@ -140,23 +140,23 @@ struct BattleReviewOverlay: View {
 
 struct TurnSummaryOverlay: View {
     let notices: [String]
-    let reports: [RBBattleReport]
+    let reports: [CTCBattleReport]
     let detail: Bool
-    let players: [RBPlayer]
+    let players: [CTCPlayer]
     let onDismiss: () -> Void
 
     var body: some View {
-        RBScrim {
+        CTCScrim {
             VStack(spacing: 14) {
-                RBRibbonHeader(title: "The River Turns")
-                RBFittedScroll(cap: 340) {
+                CTCRibbonHeader(title: "The River Turns")
+                CTCFittedScroll(cap: 340) {
                     VStack(alignment: .leading, spacing: 10) {
                         if !notices.isEmpty {
                             VStack(alignment: .leading, spacing: 7) {
                                 ForEach(Array(notices.enumerated()), id: \.offset) { _, line in
                                     HStack(alignment: .top, spacing: 7) {
-                                        Circle().fill(RBTheme.goldLine).frame(width: 6, height: 6).padding(.top, 5)
-                                        Text(line).font(RBTheme.body(13)).foregroundColor(RBTheme.ink)
+                                        Circle().fill(CTCTheme.goldLine).frame(width: 6, height: 6).padding(.top, 5)
+                                        Text(line).font(CTCTheme.body(13)).foregroundColor(CTCTheme.ink)
                                             .fixedSize(horizontal: false, vertical: true)
                                     }
                                 }
@@ -170,18 +170,18 @@ struct TurnSummaryOverlay: View {
                         }
                         if notices.isEmpty && reports.isEmpty {
                             Text("The barons bide their time.")
-                                .font(RBTheme.body(13)).foregroundColor(RBTheme.inkSoft)
+                                .font(CTCTheme.body(13)).foregroundColor(CTCTheme.inkSoft)
                         }
                     }
                     .padding(.horizontal, 2)
                     .frame(maxWidth: .infinity, alignment: .leading)
                 }
                 Button(action: onDismiss) { Text("To your turn").frame(maxWidth: .infinity) }
-                    .buttonStyle(RBButtonStyle())
+                    .buttonStyle(CTCButtonStyle())
             }
             .padding(16)
-            .background(RoundedRectangle(cornerRadius: 18).fill(RBTheme.card)
-                .overlay(RoundedRectangle(cornerRadius: 18).strokeBorder(RBTheme.cardBorder, lineWidth: 1.4)))
+            .background(RoundedRectangle(cornerRadius: 18).fill(CTCTheme.card)
+                .overlay(RoundedRectangle(cornerRadius: 18).strokeBorder(CTCTheme.cardBorder, lineWidth: 1.4)))
         }
     }
 }
@@ -195,27 +195,27 @@ struct MatchMenuOverlay: View {
     @State private var confirmResign = false
 
     var body: some View {
-        RBScrim {
+        CTCScrim {
             VStack(spacing: 14) {
-                RBRibbonHeader(title: "Anchored")
+                CTCRibbonHeader(title: "Anchored")
                 Button(action: onResume) { Text("Resume Match").frame(maxWidth: .infinity) }
-                    .buttonStyle(RBButtonStyle())
+                    .buttonStyle(CTCButtonStyle())
                 Button(action: onLeave) { Text("Leave (saved for later)").frame(maxWidth: .infinity) }
-                    .buttonStyle(RBButtonStyle(fill: RBTheme.bankGreenDeep))
+                    .buttonStyle(CTCButtonStyle(fill: CTCTheme.bankGreenDeep))
                 if confirmResign {
                     Text("Resigning records this match as a loss.")
-                        .font(RBTheme.body(12)).foregroundColor(RBTheme.inkSoft)
+                        .font(CTCTheme.body(12)).foregroundColor(CTCTheme.inkSoft)
                         .multilineTextAlignment(.center)
                     Button(action: onResign) { Text("Confirm Resign").frame(maxWidth: .infinity) }
-                        .buttonStyle(RBButtonStyle(fill: RBTheme.danger))
+                        .buttonStyle(CTCButtonStyle(fill: CTCTheme.danger))
                 } else {
                     Button(action: { confirmResign = true }) { Text("Resign Match").frame(maxWidth: .infinity) }
-                        .buttonStyle(RBButtonStyle(fill: RBTheme.danger.opacity(0.85)))
+                        .buttonStyle(CTCButtonStyle(fill: CTCTheme.danger.opacity(0.85)))
                 }
             }
             .padding(18)
-            .background(RoundedRectangle(cornerRadius: 18).fill(RBTheme.card)
-                .overlay(RoundedRectangle(cornerRadius: 18).strokeBorder(RBTheme.cardBorder, lineWidth: 1.4)))
+            .background(RoundedRectangle(cornerRadius: 18).fill(CTCTheme.card)
+                .overlay(RoundedRectangle(cornerRadius: 18).strokeBorder(CTCTheme.cardBorder, lineWidth: 1.4)))
         }
     }
 }
@@ -232,16 +232,16 @@ struct ResultOverlay: View {
     private var won: Bool { state.winner == 0 }
 
     var body: some View {
-        RBScrim {
+        CTCScrim {
             VStack(spacing: 15) {
-                RBRibbonHeader(title: won ? "Victory" : "Defeat")
+                CTCRibbonHeader(title: won ? "Victory" : "Defeat")
 
                 Text(headline)
-                    .font(RBTheme.body(14)).foregroundColor(RBTheme.ink)
+                    .font(CTCTheme.body(14)).foregroundColor(CTCTheme.ink)
                     .multilineTextAlignment(.center)
                     .fixedSize(horizontal: false, vertical: true)
 
-                if mode == "campaign", let meta = RBScenarios.meta(scenarioID) {
+                if mode == "campaign", let meta = CTCScenarios.meta(scenarioID) {
                     starRow
                     VStack(alignment: .leading, spacing: 6) {
                         starLine("Win the scenario", earned: won)
@@ -250,21 +250,21 @@ struct ResultOverlay: View {
                     }
                     .padding(12)
                     .frame(maxWidth: .infinity, alignment: .leading)
-                    .background(RoundedRectangle(cornerRadius: 12).fill(RBTheme.parchment))
+                    .background(RoundedRectangle(cornerRadius: 12).fill(CTCTheme.parchment))
                 } else if won {
                     HStack(spacing: 6) {
-                        Text("Landings held:").font(RBTheme.body(13)).foregroundColor(RBTheme.inkSoft)
-                        Text("\(state.nodes.filter { $0.owner == 0 }.count)").font(RBTheme.num(14)).foregroundColor(RBTheme.ink)
-                        Text("· Turn \(state.turn)").font(RBTheme.body(13)).foregroundColor(RBTheme.inkSoft)
+                        Text("Landings held:").font(CTCTheme.body(13)).foregroundColor(CTCTheme.inkSoft)
+                        Text("\(state.nodes.filter { $0.owner == 0 }.count)").font(CTCTheme.num(14)).foregroundColor(CTCTheme.ink)
+                        Text("· Turn \(state.turn)").font(CTCTheme.body(13)).foregroundColor(CTCTheme.inkSoft)
                     }
                 }
 
                 Button(action: onExit) { Text("Return to Port").frame(maxWidth: .infinity) }
-                    .buttonStyle(RBButtonStyle())
+                    .buttonStyle(CTCButtonStyle())
             }
             .padding(18)
-            .background(RoundedRectangle(cornerRadius: 18).fill(RBTheme.card)
-                .overlay(RoundedRectangle(cornerRadius: 18).strokeBorder(RBTheme.cardBorder, lineWidth: 1.4)))
+            .background(RoundedRectangle(cornerRadius: 18).fill(CTCTheme.card)
+                .overlay(RoundedRectangle(cornerRadius: 18).strokeBorder(CTCTheme.cardBorder, lineWidth: 1.4)))
         }
     }
 
@@ -286,19 +286,19 @@ struct ResultOverlay: View {
     private var starRow: some View {
         HStack(spacing: 12) {
             ForEach(0..<3, id: \.self) { i in
-                RBStarIcon()
-                    .fill(i < stars ? RBTheme.goldLine : RBTheme.inkSoft.opacity(0.22))
+                CTCStarIcon()
+                    .fill(i < stars ? CTCTheme.goldLine : CTCTheme.inkSoft.opacity(0.22))
                     .frame(width: 40, height: 40)
-                    .overlay(RBStarIcon().stroke(RBTheme.ink.opacity(0.25), lineWidth: 1).frame(width: 40, height: 40))
+                    .overlay(CTCStarIcon().stroke(CTCTheme.ink.opacity(0.25), lineWidth: 1).frame(width: 40, height: 40))
             }
         }
     }
 
     private func starLine(_ text: String, earned: Bool) -> some View {
         HStack(spacing: 8) {
-            RBStarIcon().fill(earned ? RBTheme.goldLine : RBTheme.inkSoft.opacity(0.22))
+            CTCStarIcon().fill(earned ? CTCTheme.goldLine : CTCTheme.inkSoft.opacity(0.22))
                 .frame(width: 15, height: 15)
-            Text(text).font(RBTheme.body(13)).foregroundColor(earned ? RBTheme.ink : RBTheme.inkSoft)
+            Text(text).font(CTCTheme.body(13)).foregroundColor(earned ? CTCTheme.ink : CTCTheme.inkSoft)
         }
     }
 }
@@ -321,31 +321,31 @@ struct OnboardingOverlay: View {
     ]
 
     var body: some View {
-        RBScrim {
+        CTCScrim {
             VStack(spacing: 16) {
-                RBRibbonHeader(title: steps[step].0)
+                CTCRibbonHeader(title: steps[step].0)
                 Text(steps[step].1)
-                    .font(RBTheme.body(15)).foregroundColor(RBTheme.ink)
+                    .font(CTCTheme.body(15)).foregroundColor(CTCTheme.ink)
                     .multilineTextAlignment(.center)
                     .fixedSize(horizontal: false, vertical: true)
                     .padding(.horizontal, 4)
                 HStack(spacing: 7) {
                     ForEach(0..<steps.count, id: \.self) { i in
-                        Circle().fill(i == step ? RBTheme.navy : RBTheme.inkSoft.opacity(0.3))
+                        Circle().fill(i == step ? CTCTheme.navy : CTCTheme.inkSoft.opacity(0.3))
                             .frame(width: 8, height: 8)
                     }
                 }
                 Button(action: {
-                    RBStore.shared.tap()
+                    CTCStore.shared.tap()
                     if step < steps.count - 1 { withAnimation { step += 1 } } else { onDone() }
                 }) {
                     Text(step < steps.count - 1 ? "Next" : "Set Sail").frame(maxWidth: .infinity)
                 }
-                .buttonStyle(RBButtonStyle())
+                .buttonStyle(CTCButtonStyle())
             }
             .padding(20)
-            .background(RoundedRectangle(cornerRadius: 18).fill(RBTheme.card)
-                .overlay(RoundedRectangle(cornerRadius: 18).strokeBorder(RBTheme.cardBorder, lineWidth: 1.4)))
+            .background(RoundedRectangle(cornerRadius: 18).fill(CTCTheme.card)
+                .overlay(RoundedRectangle(cornerRadius: 18).strokeBorder(CTCTheme.cardBorder, lineWidth: 1.4)))
         }
     }
 }

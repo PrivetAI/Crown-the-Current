@@ -1,14 +1,14 @@
 import Foundation
 
 /// Reachability info for one destination node.
-struct RBRoute: Equatable {
+struct CTCRoute: Equatable {
     var cost: Int          // MP spent
     var tolls: Int         // florins in toll fees along the path
     var path: [Int]        // node ids from start (inclusive) to destination (inclusive)
 }
 
 /// All rules of the river. Pure functions over GameState — no UI imports.
-enum RBEngine {
+enum CTCEngine {
 
     // MARK: - Tunables (kept simple and visible; mirrored in the Codex)
 
@@ -40,7 +40,7 @@ enum RBEngine {
         (owner == 0 || owner == -1) ? bare : thirdPerson
     }
 
-    static func baseIncome(_ kind: RBNodeKind) -> Int {
+    static func baseIncome(_ kind: CTCNodeKind) -> Int {
         switch kind {
         case .harbor: return 3
         case .island: return 2
@@ -227,7 +227,7 @@ enum RBEngine {
     }
 
     /// Candidate dam edges for a player at a node: adjacent reaches without a dam.
-    static func damCandidates(at nodeID: Int, for player: Int, in s: GameState) -> [RBEdge] {
+    static func damCandidates(at nodeID: Int, for player: Int, in s: GameState) -> [CTCEdge] {
         guard standingDams(of: player, in: s) < maxDamsPerPlayer else { return [] }
         return s.edges
             .filter { ($0.from == nodeID || $0.to == nodeID) && $0.damOwner == -1 }
@@ -289,7 +289,7 @@ enum RBEngine {
                 trackStack(&s, p, s.fleets[fi].strength)
             }
         } else if mine.isEmpty {
-            let f = RBFleet(id: s.nextFleetID, owner: p, node: nodeID, strength: recruitStrength, mp: 0)
+            let f = CTCFleet(id: s.nextFleetID, owner: p, node: nodeID, strength: recruitStrength, mp: 0)
             s.nextFleetID += 1
             s.fleets.append(f)
             trackStack(&s, p, recruitStrength)
@@ -306,20 +306,20 @@ enum RBEngine {
     // MARK: - Movement
 
     /// True if `player` may traverse this reach (dams block everyone else).
-    static func canTraverse(_ e: RBEdge, player: Int) -> Bool {
+    static func canTraverse(_ e: CTCEdge, player: Int) -> Bool {
         e.damOwner == -1 || e.damOwner == player
     }
 
     /// Dijkstra over the river graph for one fleet. Enemy-occupied nodes are
     /// terminal (you can attack in, never sail through). Own stacks can be
     /// passed through; ending on one requires the merged stack to fit.
-    static func routes(for fleetID: Int, in s: GameState) -> [Int: RBRoute] {
+    static func routes(for fleetID: Int, in s: GameState) -> [Int: CTCRoute] {
         guard let f = s.fleet(fleetID), f.mp > 0 else { return [:] }
         let p = f.owner
         let up = upCost(s)
         var dist: [Int: (cost: Int, tolls: Int, path: [Int])] = [f.node: (0, 0, [f.node])]
         var frontier: [(cost: Int, tolls: Int, node: Int)] = [(0, 0, f.node)]
-        var results: [Int: RBRoute] = [:]
+        var results: [Int: CTCRoute] = [:]
 
         while !frontier.isEmpty {
             frontier.sort { ($0.cost, $0.tolls, $0.node) < ($1.cost, $1.tolls, $1.node) }
@@ -353,7 +353,7 @@ enum RBEngine {
             let friendly = s.fleetsAt(nodeID).filter { $0.owner == p }
             let friendlyStr = friendly.reduce(0) { $0 + $1.strength }
             if friendlyStr > 0 && friendlyStr + f.strength > maxStackSize { continue }
-            results[nodeID] = RBRoute(cost: entry.cost, tolls: entry.tolls, path: entry.path)
+            results[nodeID] = CTCRoute(cost: entry.cost, tolls: entry.tolls, path: entry.path)
         }
         return results
     }
@@ -480,7 +480,7 @@ enum RBEngine {
         let defTotal = defStr + harborMod + dockMod
         let attackerWon = atkTotal > defTotal   // ties go to the defender
 
-        var report = RBBattleReport()
+        var report = CTCBattleReport()
         report.id = s.nextReportID
         s.nextReportID += 1
         report.turn = s.turn
@@ -571,7 +571,7 @@ enum RBEngine {
     }
 
     /// Enemy dams adjacent to this fleet's node (breach candidates).
-    static func adjacentEnemyDams(for fleetID: Int, in s: GameState) -> [RBEdge] {
+    static func adjacentEnemyDams(for fleetID: Int, in s: GameState) -> [CTCEdge] {
         guard let f = s.fleet(fleetID) else { return [] }
         return s.edges
             .filter { ($0.from == f.node || $0.to == f.node) && $0.damOwner != -1 && $0.damOwner != f.owner }

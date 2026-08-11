@@ -1,7 +1,7 @@
 import SwiftUI
 
 /// Painterly riverlands palette — forced light, theme-independent.
-enum RBTheme {
+enum CTCTheme {
     static let parchment = Color(red: 0.961, green: 0.937, blue: 0.886)   // #F5EFE2
     static let card = Color(red: 1.0, green: 0.976, blue: 0.925)
     static let cardBorder = Color(red: 0.788, green: 0.725, blue: 0.561)
@@ -35,9 +35,9 @@ enum RBTheme {
         return banners[id]
     }
 
-    static func ownerColor(_ owner: Int, players: [RBPlayer]) -> Color {
+    static func ownerColor(_ owner: Int, players: [CTCPlayer]) -> Color {
         if owner == -1 { return Color(red: 0.25, green: 0.22, blue: 0.20) }       // pirates
-        if owner == RBEngine.garrisonOwner { return Color(red: 0.45, green: 0.44, blue: 0.42) }
+        if owner == CTCEngine.garrisonOwner { return Color(red: 0.45, green: 0.44, blue: 0.42) }
         guard owner >= 0 && owner < players.count else { return Color(red: 0.62, green: 0.58, blue: 0.50) }
         return bannerColor(players[owner].colorID)
     }
@@ -51,19 +51,19 @@ enum RBTheme {
 // MARK: - Reusable chrome
 
 /// Banner-ribbon section header.
-struct RBRibbonHeader: View {
+struct CTCRibbonHeader: View {
     let title: String
     var subtitle: String? = nil
 
     var body: some View {
         VStack(spacing: 3) {
             ZStack {
-                RBRibbonShape()
-                    .fill(RBTheme.navy)
-                RBRibbonShape()
-                    .strokeBorder(RBTheme.goldLine.opacity(0.85), lineWidth: 1.5)
+                CTCRibbonShape()
+                    .fill(CTCTheme.navy)
+                CTCRibbonShape()
+                    .strokeBorder(CTCTheme.goldLine.opacity(0.85), lineWidth: 1.5)
                 Text(title)
-                    .font(RBTheme.display(19))
+                    .font(CTCTheme.display(19))
                     .foregroundColor(.white)
                     .lineLimit(1)
                     .minimumScaleFactor(0.6)
@@ -72,18 +72,18 @@ struct RBRibbonHeader: View {
             .frame(height: 46)
             if let sub = subtitle {
                 Text(sub)
-                    .font(RBTheme.body(13))
-                    .foregroundColor(RBTheme.inkSoft)
+                    .font(CTCTheme.body(13))
+                    .foregroundColor(CTCTheme.inkSoft)
                     .multilineTextAlignment(.center)
             }
         }
     }
 }
 
-struct RBRibbonShape: InsettableShape {
+struct CTCRibbonShape: InsettableShape {
     var inset: CGFloat = 0
 
-    func inset(by amount: CGFloat) -> RBRibbonShape {
+    func inset(by amount: CGFloat) -> CTCRibbonShape {
         var copy = self
         copy.inset += amount
         return copy
@@ -104,7 +104,7 @@ struct RBRibbonShape: InsettableShape {
     }
 }
 
-struct RBCard<Content: View>: View {
+struct CTCCard<Content: View>: View {
     let content: Content
 
     init(@ViewBuilder content: () -> Content) {
@@ -117,10 +117,10 @@ struct RBCard<Content: View>: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             .background(
                 RoundedRectangle(cornerRadius: 14)
-                    .fill(RBTheme.card)
+                    .fill(CTCTheme.card)
                     .overlay(
                         RoundedRectangle(cornerRadius: 14)
-                            .strokeBorder(RBTheme.cardBorder, lineWidth: 1.2)
+                            .strokeBorder(CTCTheme.cardBorder, lineWidth: 1.2)
                     )
             )
     }
@@ -129,7 +129,7 @@ struct RBCard<Content: View>: View {
 /// A painterly hero-art banner: a catalog image under a bottom legibility
 /// gradient, with an optional overlaid title/subtitle. Sized to a fixed height
 /// and clipped, so it stays safe on a 375×667 screen.
-struct RBArtBanner: View {
+struct CTCArtBanner: View {
     let imageName: String
     var title: String? = nil
     var subtitle: String? = nil
@@ -152,7 +152,7 @@ struct RBArtBanner: View {
                 VStack(alignment: .leading, spacing: 2) {
                     if let t = title {
                         Text(t)
-                            .font(RBTheme.display(20))
+                            .font(CTCTheme.display(20))
                             .foregroundColor(.white)
                             .shadow(color: .black.opacity(0.75), radius: 3, y: 1)
                             .lineLimit(1)
@@ -160,7 +160,7 @@ struct RBArtBanner: View {
                     }
                     if let s = subtitle {
                         Text(s)
-                            .font(RBTheme.body(12))
+                            .font(CTCTheme.body(12))
                             .foregroundColor(.white.opacity(0.92))
                             .shadow(color: .black.opacity(0.75), radius: 2, y: 1)
                             .fixedSize(horizontal: false, vertical: true)
@@ -174,17 +174,17 @@ struct RBArtBanner: View {
         .frame(height: height)
         .frame(maxWidth: .infinity)
         .clipShape(RoundedRectangle(cornerRadius: 14))
-        .overlay(RoundedRectangle(cornerRadius: 14).strokeBorder(RBTheme.cardBorder, lineWidth: 1.2))
+        .overlay(RoundedRectangle(cornerRadius: 14).strokeBorder(CTCTheme.cardBorder, lineWidth: 1.2))
     }
 }
 
-struct RBButtonStyle: ButtonStyle {
-    var fill: Color = RBTheme.navy
+struct CTCButtonStyle: ButtonStyle {
+    var fill: Color = CTCTheme.navy
     var textColor: Color = .white
 
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
-            .font(RBTheme.display(15))
+            .font(CTCTheme.display(15))
             .foregroundColor(textColor)
             .padding(.vertical, 10)
             .padding(.horizontal, 18)
@@ -198,7 +198,7 @@ struct RBButtonStyle: ButtonStyle {
 // MARK: - Custom icon shapes (no SF Symbols, no emoji)
 
 /// A single meandering line — the app's crest motif.
-struct RBMeanderShape: Shape {
+struct CTCMeanderShape: Shape {
     func path(in rect: CGRect) -> Path {
         var p = Path()
         let w = rect.width
@@ -218,7 +218,7 @@ struct RBMeanderShape: Shape {
 }
 
 /// Pennant flag on a pole (Campaign tab).
-struct RBPennantIcon: Shape {
+struct CTCPennantIcon: Shape {
     func path(in rect: CGRect) -> Path {
         var p = Path()
         let poleX = rect.minX + rect.width * 0.18
@@ -233,7 +233,7 @@ struct RBPennantIcon: Shape {
 }
 
 /// Two crossed oars (Skirmish tab).
-struct RBOarsIcon: Shape {
+struct CTCOarsIcon: Shape {
     func path(in rect: CGRect) -> Path {
         var p = Path()
         func oar(_ a: CGPoint, _ b: CGPoint, blade: Bool) {
@@ -264,7 +264,7 @@ struct RBOarsIcon: Shape {
 }
 
 /// Five-pointed star (Chronicle tab / campaign stars).
-struct RBStarIcon: Shape {
+struct CTCStarIcon: Shape {
     func path(in rect: CGRect) -> Path {
         let c = CGPoint(x: rect.midX, y: rect.midY)
         let rOuter = min(rect.width, rect.height) / 2
@@ -282,7 +282,7 @@ struct RBStarIcon: Shape {
 }
 
 /// Open ledger book (More tab).
-struct RBBookIcon: Shape {
+struct CTCBookIcon: Shape {
     func path(in rect: CGRect) -> Path {
         var p = Path()
         let midX = rect.midX
@@ -309,7 +309,7 @@ struct RBBookIcon: Shape {
 }
 
 /// Small sail (fleet marker & shipyard pip).
-struct RBSailIcon: Shape {
+struct CTCSailIcon: Shape {
     func path(in rect: CGRect) -> Path {
         var p = Path()
         let hullTop = rect.maxY - rect.height * 0.22
@@ -330,12 +330,12 @@ struct RBSailIcon: Shape {
 }
 
 /// Coin with inner ring (florins).
-struct RBCoinIcon: View {
+struct CTCCoinIcon: View {
     var size: CGFloat = 16
     var body: some View {
         ZStack {
-            Circle().fill(RBTheme.goldLine)
-            Circle().strokeBorder(RBTheme.ink.opacity(0.35), lineWidth: max(1, size * 0.07))
+            Circle().fill(CTCTheme.goldLine)
+            Circle().strokeBorder(CTCTheme.ink.opacity(0.35), lineWidth: max(1, size * 0.07))
                 .padding(size * 0.18)
         }
         .frame(width: size, height: size)
@@ -343,7 +343,7 @@ struct RBCoinIcon: View {
 }
 
 /// Watchtower pip.
-struct RBTowerIcon: Shape {
+struct CTCTowerIcon: Shape {
     func path(in rect: CGRect) -> Path {
         var p = Path()
         p.move(to: CGPoint(x: rect.minX + rect.width * 0.25, y: rect.maxY))
@@ -360,7 +360,7 @@ struct RBTowerIcon: Shape {
 }
 
 /// Dam bar (two stacked blocks).
-struct RBDamIcon: Shape {
+struct CTCDamIcon: Shape {
     func path(in rect: CGRect) -> Path {
         var p = Path()
         let rows = 3
@@ -380,7 +380,7 @@ struct RBDamIcon: Shape {
 }
 
 /// Simple left-pointing chevron (back / navigation).
-struct RBChevron: Shape {
+struct CTCChevron: Shape {
     var pointRight: Bool = false
     func path(in rect: CGRect) -> Path {
         var p = Path()
@@ -398,7 +398,7 @@ struct RBChevron: Shape {
 }
 
 /// Cross / close glyph.
-struct RBCross: Shape {
+struct CTCCross: Shape {
     func path(in rect: CGRect) -> Path {
         var p = Path()
         p.move(to: CGPoint(x: rect.minX, y: rect.minY))
@@ -410,7 +410,7 @@ struct RBCross: Shape {
 }
 
 /// Laurel-ish wreath arc pair for achievements.
-struct RBLaurelIcon: Shape {
+struct CTCLaurelIcon: Shape {
     func path(in rect: CGRect) -> Path {
         var p = Path()
         p.addArc(center: CGPoint(x: rect.midX, y: rect.midY),
@@ -441,7 +441,7 @@ struct RBLaurelIcon: Shape {
 /// single column mean the modifiers below apply *nothing at all* on iPhone, so
 /// the shipped phone layout is byte-identical. Only `.regular` (iPad) picks up
 /// the wider treatment.
-struct RBLayout {
+struct CTCLayout {
     let regular: Bool
 
     init(_ sizeClass: UserInterfaceSizeClass?) {
@@ -471,7 +471,7 @@ struct RBLayout {
 extension View {
     /// Centres the view inside a capped column. A `.infinity` cap (compact)
     /// applies no modifier whatsoever.
-    @ViewBuilder func rbColumn(_ maxWidth: CGFloat) -> some View {
+    @ViewBuilder func ctcColumn(_ maxWidth: CGFloat) -> some View {
         if maxWidth == .infinity {
             self
         } else {
