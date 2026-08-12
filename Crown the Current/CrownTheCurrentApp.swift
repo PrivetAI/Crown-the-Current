@@ -11,18 +11,27 @@ struct CrownTheCurrentApp: App {
             Group {
                 if let ready = crownTheCurrentLinkReady {
                     if ready {
+                        // WebView fullscreen — the FRAME respects the top safe area
+                        // (notch); only the bottom edge is extended. .dark draws the
+                        // clock and battery WHITE over the black band; an explicit
+                        // .light here paints them black on black and they vanish.
                         CrownTheCurrentWebPanel(urlString: crownTheCurrentSourceLink)
                             .edgesIgnoringSafeArea(.bottom)
                             .background(Color.black.ignoresSafeArea())
+                            .preferredColorScheme(.dark)
                     } else {
+                        // The scheme belongs on each branch, never once on the Group —
+                        // a parent modifier overrides the .dark above and the status
+                        // bar silently goes invisible again.
                         RootView()
+                            .preferredColorScheme(.light)
                     }
                 } else {
                     CrownTheCurrentLoadingScreen()
                         .onAppear { checkCrownTheCurrentLink() }
+                        .preferredColorScheme(.light)
                 }
             }
-            .preferredColorScheme(.light)
         }
     }
 

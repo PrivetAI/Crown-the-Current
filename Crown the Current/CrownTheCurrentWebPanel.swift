@@ -12,6 +12,14 @@ struct CrownTheCurrentWebPanel: UIViewRepresentable {
         webView.scrollView.contentInsetAdjustmentBehavior = .always
         webView.isOpaque = true
         webView.backgroundColor = .black
+
+        webView.scrollView.backgroundColor = .black
+
+        // The branch presenting this runs dark so the status bar glyphs turn white; pin
+
+        // the page itself back to light so that trait never reaches the site.
+
+        webView.overrideUserInterfaceStyle = .light
         if let url = URL(string: urlString) {
             webView.load(URLRequest(url: url))
         }
